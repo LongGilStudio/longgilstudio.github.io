@@ -6,8 +6,6 @@ tags: [unity6, rendering, optimization, shaders, dots, longgilstudio]
 description: Phân tích toàn diện về sự chuyển dịch kiến trúc từ MaterialPropertyBlock sang RSUV và GPU Resident Drawer để đạt hiệu suất AAA trong Unity 6.
 ---
 
-# **Kiến trúc Render trong Unity 6: Phân tích Toàn diện về Tùy biến Material trên Từng Object và Tối ưu hóa Hiệu năng**
-
 ## **Tóm tắt Điều hành (Executive Summary)**
 
 Sự chuyển đổi sang Unity 6 đánh dấu một sự thay đổi kiến trúc cơ bản trong cách các luồng render (render pipelines) xử lý hình học dạng bản sao (instanced geometry) với khối lượng lớn. Trong lịch sử phát triển game, việc tối ưu hóa nhiều đối tượng chia sẻ chung một material nhưng yêu cầu các biến thể thuộc tính riêng biệt (chẳng hạn như đổi màu sắc \- color tints) thường phụ thuộc vào giao diện lập trình ứng dụng (API) MaterialPropertyBlock (MPB) kết hợp với hệ thống GPU Instancing tiêu chuẩn. Tuy nhiên, một phân tích chuyên sâu về Universal Render Pipeline (URP) và High Definition Render Pipeline (HDRP) trong Unity 6 tiết lộ rằng phương pháp tiếp cận kế thừa (legacy) này không còn là con đường tối ưu và trong nhiều trường hợp, nó gây ra sự suy giảm hiệu năng nghiêm trọng.
