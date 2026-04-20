@@ -297,6 +297,41 @@ OutColor = float4(
 
 Nối đầu ra này vào chân Base Color của Fragment Shader. Giờ đây, bạn đã có vô hạn biến thể màu sắc với độ trễ CPU bằng 0 và tận dụng tối đa sức mạnh của hệ thống GPU Resident Drawer.
 
+**Ví dụ: Triển khai thực tế trên Shader script (không dùng Shader Graph)**
+
+Nếu bạn viết custom shader bằng code (HLSL), bạn có thể can thiệp vào hàm `BuildSurfaceData` để giải mã `unity_RendererUserValue` và nhân với `BaseColor` như đoạn diff dưới đây:
+
+```hlsl
+void BuildSurfaceData(FragInputs fragInputs, inout GlobalSurfaceDescription surfaceDescription, float3 V, PositionInputs posInput, out SurfaceData surfaceData)
+{
+    ZERO_INITIALIZE(SurfaceData, surfaceData);
+
+    surfaceData.specularOcclusion = 1.0;
+    surfaceData.thickness = 0.0;
+
+    // Giải mã RSUV
+    uint rsuvValue = unity_RendererUserValue;
+    float3 rsuvColor = float3(1.0, 1.0, 1.0);
+    if (rsuvValue != 0) {
+        rsuvColor.r = (float)((rsuvValue >> 0) & 255) / 255.0;
+        rsuvColor.g = (float)((rsuvValue >> 8) & 255) / 255.0;
+        rsuvColor.b = (float)((rsuvValue >> 16) & 255) / 255.0;
+    }
+
+    // Áp dụng màu rsuvColor
+    surfaceData.baseColor =             surfaceDescription.BaseColor * rsuvColor;
+    surfaceData.perceptualSmoothness =  surfaceDescription.Smoothness;
+    surfaceData.ambientOcclusion =      surfaceDescription.Occlusion;
+    surfaceData.metallic =              surfaceDescription.Metallic;
+    surfaceData.coatMask =              surfaceDescription.CoatMask;
+    // ... 
+}
+```
+
+*Tham khảo thêm tại:*
+
+{% include embed/youtube.html id='U5UXG3D9GXE' %}
+
 **4\. Vượt mốc 100.000 Objects: Giải pháp DOTS / ECS**
 
 Nếu game của bạn yêu cầu render hàng trăm ngàn đơn vị độc lập (như các binh đoàn khổng lồ), hệ thống GameObjects truyền thống chắc chắn sẽ thắt cổ chai CPU dù bạn tối ưu render tốt đến đâu. Đối với quy mô này, hãy chuyển sang cấu trúc Unity DOTS. Sử dụng component URPMaterialPropertyOverride cho phép thiết lập bố cục bộ nhớ Data-Oriented, giao tiếp trực tiếp với hệ thống BatchRendererGroup API ở cấp độ thấp, mang lại hiệu năng vô đối chuẩn AAA thực thụ.
@@ -362,6 +397,41 @@ OutColor = float4(
 ```
 
 Connect this output to your Base Color fragment input. You now have infinite color variations with zero draw call penalties, while fully utilizing the GPU Resident Drawer.
+
+**Example: Real-world implementation in a Custom Shader (without Shader Graph)**
+
+If you are writing a custom shader in code (HLSL), you can modify the `BuildSurfaceData` function to decode `unity_RendererUserValue` and multiply it with the `BaseColor` as shown in the diff below:
+
+```hlsl
+void BuildSurfaceData(FragInputs fragInputs, inout GlobalSurfaceDescription surfaceDescription, float3 V, PositionInputs posInput, out SurfaceData surfaceData)
+{
+    ZERO_INITIALIZE(SurfaceData, surfaceData);
+
+    surfaceData.specularOcclusion = 1.0;
+    surfaceData.thickness = 0.0;
+
+    // Decode RSUV
+    uint rsuvValue = unity_RendererUserValue;
+    float3 rsuvColor = float3(1.0, 1.0, 1.0);
+    if (rsuvValue != 0) {
+        rsuvColor.r = (float)((rsuvValue >> 0) & 255) / 255.0;
+        rsuvColor.g = (float)((rsuvValue >> 8) & 255) / 255.0;
+        rsuvColor.b = (float)((rsuvValue >> 16) & 255) / 255.0;
+    }
+
+    // Apply rsuvColor
+    surfaceData.baseColor =             surfaceDescription.BaseColor * rsuvColor;
+    surfaceData.perceptualSmoothness =  surfaceDescription.Smoothness;
+    surfaceData.ambientOcclusion =      surfaceDescription.Occlusion;
+    surfaceData.metallic =              surfaceDescription.Metallic;
+    surfaceData.coatMask =              surfaceDescription.CoatMask;
+    // ...
+}
+```
+
+*See also:*
+
+{% include embed/youtube.html id='U5UXG3D9GXE' %}
 
 **4\. Going Beyond 100,000 Objects: DOTS / ECS**
 
