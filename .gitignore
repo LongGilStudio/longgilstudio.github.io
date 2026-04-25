@@ -28,3 +28,6 @@ assets/js/dist
 
 # Scripts
 fix_refs.py
+
+# Copilot skills
+.github/skills/
