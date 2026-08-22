@@ -13,6 +13,7 @@ Khám phá **GilongWorld** - tựa game Hành động Nhập vai (Action RPG) b�
 Khám phá những vùng đất vô định và viết nên câu chuyện trở về của riêng bạn.
 
 > 🎮 [**Wishlist GilongWorld trên Steam ngay!**](https://store.steampowered.com/app/4615990/GilongWorld?utm_source=website&utm_medium=referral&utm_campaign=home_page)
+> 🔗 [https://store.steampowered.com/app/4615990/GilongWorld](https://store.steampowered.com/app/4615990/GilongWorld)
 
 ### Nghệ thuật Luyện dược - Giả kim & Trồng trọt
 
@@ -31,6 +32,7 @@ Thiết lập và cá nhân hóa nơi trú ẩn của riêng bạn. Từ một v
 Theo dõi tiến độ phát triển, tham gia thảo luận và trải nghiệm game tại các kênh chính thức của Long Gil Studio:
 
 - 🎮 **Steam:** [Wishlist GilongWorld](https://store.steampowered.com/app/4615990/GilongWorld?utm_source=website&utm_medium=referral&utm_campaign=blog_about)
+  - 🔗 Link Steam: <https://store.steampowered.com/app/4615990/GilongWorld>
 - 💬 **Discord:** [Tham gia máy chủ](https://discord.gg/DbzpYe5T2P)
 - 📺 **YouTube:** [@LongGilStudio](https://www.youtube.com/@LongGilStudio)
 - 🌐 **Website:** [longgilstudio.com](https://longgilstudio.com)
