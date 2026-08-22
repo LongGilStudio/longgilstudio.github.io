@@ -14,6 +14,8 @@ Khám phá những vùng đất vô định và viết nên câu chuyện trở 
 
 > 🎮 [**Wishlist GilongWorld trên Steam ngay!**](https://store.steampowered.com/app/4615990/GilongWorld?utm_source=website&utm_medium=referral&utm_campaign=home_page)
 > 🔗 [https://store.steampowered.com/app/4615990/GilongWorld](https://store.steampowered.com/app/4615990/GilongWorld)
+> 
+> ![GilongWorld trên Steam](/assets/img/steam/Header_Capsule_920x430.png)
 
 ### Nghệ thuật Luyện dược - Giả kim & Trồng trọt
 
