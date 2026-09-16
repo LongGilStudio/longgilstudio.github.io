@@ -292,6 +292,63 @@ Việc chuyển dịch sang mô hình trừu tượng hóa này mang lại hai l
 
 ---
 
+## **5. Thực tiễn triển khai: Tối ưu hóa hệ thống RequirementsManager (Case Study)**
+
+Trong khuôn khổ dự án thực tế sử dụng framework RPG Builder (Dự án GLW), một vấn đề nghiêm trọng về hiệu năng đã được phát hiện trong lớp `RequirementsManager.cs`. Cụ thể, hệ thống kiểm tra điều kiện thời gian của game (ví dụ: yêu cầu sự kiện diễn ra vào đúng tháng, ngày, giờ nhất định) liên tục gọi `DateTime.Now` nhiều lần một cách rời rạc:
+
+```csharp
+if(requirement.CheckYear) results.Add(DateTime.Now.Year == requirement.Year);
+if(requirement.CheckMonth) results.Add(DateTime.Now.Month == requirement.Month);
+if(requirement.CheckDay) results.Add(DateTime.Now.Day == requirement.Day);
+// ... Lặp lại cho Hour, Minute, Second
+```
+
+**Các vấn đề phát sinh từ mã nguồn cũ:**
+1. **CPU Overhead cực lớn:** Để kiểm tra 1 requirement, hệ thống có thể kích hoạt đến 7-10 lời gọi `DateTime.Now` (bao gồm cả trong các hàm phụ trợ như `GetWeekNumber()`). Nếu có 100 thực thể kiểm tra đồng thời, sẽ có hàng ngàn Syscall xuống HĐH mỗi khung hình, gây thắt nút cổ chai (bottleneck) nghiêm trọng.
+2. **Temporal Tearing (Sai lệch thời khắc):** Nếu thời khắc chuyển giao giữa các giây (hoặc phút, ngày) rơi đúng vào giữa quá trình đọc lệnh trên (ví dụ ở mili-giây thứ 999), biến `Month` có thể được lấy từ tháng cũ nhưng biến `Day` lại được lấy từ ngày mới. Hậu quả là game ghép nối ra một mốc thời gian hoàn toàn không tồn tại trên thực tế.
+
+**Giải pháp đã triển khai thực tế (Per-Frame Caching):**
+Kiến trúc Frame Caching được tích hợp trực tiếp, sử dụng `Time.frameCount` làm cờ báo hết hạn bộ nhớ đệm (cache invalidation). Cách tiếp cận này tận dụng vòng đời tĩnh (static) thay vì Update loop:
+
+```csharp
+private static DateTime _cachedSystemTime;
+private static int _lastSystemTimeFrame = -1;
+
+private static DateTime GetCurrentSystemTime()
+{
+    if (Application.isPlaying) 
+    {
+        int currentFrame = Time.frameCount;
+        
+        // Chỉ lấy giờ thật từ OS 1 lần duy nhất mỗi khung hình
+        if (_lastSystemTimeFrame != currentFrame)
+        {
+            _lastSystemTimeFrame = currentFrame;
+            _cachedSystemTime = DateTime.Now; 
+        }
+        
+        return _cachedSystemTime;
+    }
+    return DateTime.Now; // Chế độ Editor
+}
+```
+
+Ở nơi cần xử lý logic, toàn bộ các phép kiểm tra đều được tham chiếu đến một **ảnh chụp (snapshot)** thời gian duy nhất:
+
+```csharp
+DateTime now = GetCurrentSystemTime();
+if(requirement.CheckYear) results.Add(now.Year == requirement.Year);
+if(requirement.CheckMonth) results.Add(now.Month == requirement.Month);
+if(requirement.CheckDay) results.Add(now.Day == requirement.Day);
+```
+
+**Kết quả sau khi tối ưu (Bản vá `MOD-RPGB-008`):** 
+- **Triệt tiêu hoàn toàn Syscall dư thừa:** Thay vì hàng ngàn lượt gọi, `DateTime.Now` bị ép xuống mức độ $\mathcal{O}(1)$ - đúng 1 lần cho mọi phép tính trên mỗi frame.
+- **Tính nguyên tử tuyệt đối (Atomic consistency):** Các trường `Year`, `Month`, `Day` chắc chắn thuộc về cùng một tích tắc duy nhất.
+- **Dọn dẹp Unity Project Auditor:** Hoàn toàn loại bỏ cảnh báo "Major" về hiệu năng hệ thống liên quan đến System.DateTime.
+
+
+
 ## **6. Kết luận**
 
 Việc sử dụng trực tiếp `System.DateTime.Now` trong các vòng lặp cập nhật tần suất cao của Unity Engine cấu thành một vấn đề kỹ thuật nghiêm trọng cả về hiệu năng phần cứng lẫn tính toàn vẹn của dữ liệu logic[^3]. 
