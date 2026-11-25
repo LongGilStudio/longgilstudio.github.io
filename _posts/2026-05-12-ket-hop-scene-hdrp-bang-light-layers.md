@@ -4,6 +4,8 @@ date: 2026-05-12 10:00:00 +0700
 categories: [Game Development, Unity]
 tags: [unity6, hdrp, rendering, lighting, shadows, volumetrics, apv]
 description: Phân tích cách gộp hai không gian HDRP trong Unity 6 bằng Light Layers, bóng đổ, volumetrics, skybox, hậu kỳ, và Adaptive Probe Volumes.
+lang: vi
+translation_id: unity6-hdrp-multi-scene-light-layers
 ---
 
 ## **Xác Thực Khởi Điểm: Nền Tảng Phân Tách Ánh Sáng Bằng Light Layers**

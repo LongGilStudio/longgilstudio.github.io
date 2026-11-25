@@ -149,7 +149,18 @@ pwa:
     deny_paths:
       # - "/example"  # URLs match `<SITE_URL>/example/*` will not be cached by the PWA
 
-paginate: 10
+future: true
+paginate: 30
+default_lang: en
+languages: [en, vi]
+
+gilongworld:
+  steam_app_id: "4615990"
+  steam_url: "https://store.steampowered.com/app/4615990/GilongWorld"
+  capsule_image: "/assets/img/steam/Header_Capsule_920x430.png"
+  discord_url: "https://discord.gg/DbzpYe5T2P"
+  youtube_url: "https://www.youtube.com/@LongGilStudio"
+  website_url: "https://longgilstudio.com"
 
 # The base URL of your site
 baseurl: ""

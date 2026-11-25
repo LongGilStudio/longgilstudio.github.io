@@ -1,0 +1,355 @@
+/* Bilingual (EN/VI) Switcher & GilongWorld Marketing Components for Chirpy */
+
+.lgs-lang-hidden {
+  display: none !important;
+}
+
+/* --- Language Switcher Pill --- */
+.lgs-lang-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem;
+  border-radius: 999px;
+  background: var(--card-bg, rgba(128, 128, 128, 0.1));
+  border: 1px solid var(--main-border-color, rgba(128, 128, 128, 0.22));
+  font-size: 0.78rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+#topbar .lgs-lang-switcher {
+  margin-left: auto;
+  margin-right: 0.65rem;
+}
+
+@media (max-width: 849px) {
+  #topbar .lgs-lang-switcher {
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+  }
+}
+
+.lgs-lang-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.32rem 0.62rem;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted-color, #6c757d);
+  font-weight: 600;
+  font-size: 0.76rem;
+  cursor: pointer;
+  text-decoration: none !important;
+  transition: background-color 0.18s ease, color 0.18s ease, transform 0.12s ease;
+}
+
+.lgs-lang-btn:hover {
+  color: var(--heading-color, inherit);
+}
+
+.lgs-lang-btn.is-active {
+  background: var(--link-color, #0d6efd);
+  color: #ffffff !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+}
+
+/* --- Sidebar Language Switcher & GilongWorld Mini-Card --- */
+.lgs-sidebar-block {
+  width: 100%;
+  padding: 0 1.25rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.lgs-sidebar-switcher-wrap {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 0.65rem;
+}
+
+.lgs-sidebar-card {
+  border-radius: 0.75rem;
+  border: 1px solid var(--sidebar-border-color, var(--main-border-color, rgba(128, 128, 128, 0.22)));
+  background: var(--sidebar-btn-bg, var(--card-bg, rgba(128, 128, 128, 0.06)));
+  padding: 0.72rem 0.82rem;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.lgs-sidebar-card-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--heading-color, inherit);
+  margin-bottom: 0.35rem;
+}
+
+.lgs-sidebar-card-badge {
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.42rem;
+  border-radius: 0.35rem;
+  background: rgba(25, 135, 84, 0.16);
+  color: #198754;
+  font-weight: 700;
+}
+
+[data-mode="dark"] .lgs-sidebar-card-badge {
+  background: rgba(74, 222, 128, 0.15);
+  color: #4ade80;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-mode="light"]) .lgs-sidebar-card-badge {
+    background: rgba(74, 222, 128, 0.15);
+    color: #4ade80;
+  }
+}
+
+.lgs-sidebar-card-desc {
+  color: var(--text-muted-color, #6c757d);
+  margin: 0 0 0.6rem 0;
+  font-size: 0.76rem;
+}
+
+.lgs-sidebar-card-actions {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.lgs-mini-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  padding: 0.34rem 0.6rem;
+  border-radius: 0.45rem;
+  font-size: 0.74rem;
+  font-weight: 600;
+  text-decoration: none !important;
+  transition: opacity 0.16s ease, transform 0.12s ease;
+}
+
+.lgs-mini-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.lgs-mini-btn-steam {
+  background: linear-gradient(135deg, #1b2838 0%, #2a475e 100%);
+  color: #66c0f4 !important;
+  border: 1px solid rgba(102, 192, 244, 0.35);
+  flex: 1 1 auto;
+}
+
+.lgs-mini-btn-discord {
+  background: rgba(88, 101, 242, 0.14);
+  color: #5865f2 !important;
+  border: 1px solid rgba(88, 101, 242, 0.3);
+}
+
+[data-mode="dark"] .lgs-mini-btn-discord {
+  color: #8ea1ff !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-mode="light"]) .lgs-mini-btn-discord {
+    color: #8ea1ff !important;
+  }
+}
+
+/* --- Top-of-Post Bilingual Bar & GilongWorld Devlog Badge --- */
+.lgs-post-top-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin: 1rem 0 1.45rem 0;
+  padding: 0.85rem 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--main-border-color, rgba(128, 128, 128, 0.22));
+  background: var(--card-bg, rgba(128, 128, 128, 0.05));
+}
+
+.lgs-post-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.lgs-post-lang-switch-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--link-color, #0d6efd) !important;
+  text-decoration: none !important;
+}
+
+.lgs-post-lang-switch-link:hover {
+  text-decoration: underline !important;
+}
+
+.lgs-post-devlog-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--text-muted-color, #6c757d);
+  text-decoration: none !important;
+}
+
+.lgs-post-devlog-pill strong {
+  color: var(--heading-color, inherit);
+}
+
+.lgs-post-devlog-pill:hover strong {
+  color: var(--link-color, #0d6efd);
+}
+
+/* --- Bottom-of-Post GilongWorld Steam Wishlist CTA Card --- */
+.lgs-steam-cta-card {
+  margin: 2.25rem 0 1.75rem 0;
+  border-radius: 0.9rem;
+  overflow: hidden;
+  border: 1px solid var(--main-border-color, rgba(128, 128, 128, 0.25));
+  background: var(--card-bg, rgba(128, 128, 128, 0.05));
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.08);
+}
+
+.lgs-steam-cta-grid {
+  display: grid;
+  grid-template-columns: minmax(260px, 360px) 1fr;
+  align-items: center;
+}
+
+.lgs-steam-cta-media {
+  position: relative;
+  background: #0d1620;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  height: 100%;
+}
+
+.lgs-steam-cta-media img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 920 / 430;
+  object-fit: contain;
+  display: block;
+  margin: 0 !important;
+  border-radius: 0 !important;
+}
+
+.lgs-steam-cta-body {
+  padding: 1.25rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.lgs-steam-cta-kicker {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #198754;
+}
+
+[data-mode="dark"] .lgs-steam-cta-kicker {
+  color: #4ade80;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-mode="light"]) .lgs-steam-cta-kicker {
+    color: #4ade80;
+  }
+}
+
+.lgs-steam-cta-title {
+  margin: 0 !important;
+  font-size: 1.18rem !important;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--heading-color, inherit);
+}
+
+.lgs-steam-cta-desc {
+  margin: 0 !important;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--text-color, inherit);
+}
+
+.lgs-steam-cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: 0.35rem;
+}
+
+.lgs-steam-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 1.05rem;
+  border-radius: 0.5rem;
+  background: linear-gradient(135deg, #1b2838 0%, #2a475e 100%);
+  color: #66c0f4 !important;
+  border: 1px solid rgba(102, 192, 244, 0.45);
+  font-weight: 700;
+  font-size: 0.88rem;
+  text-decoration: none !important;
+  transition: transform 0.14s ease, box-shadow 0.14s ease;
+}
+
+.lgs-steam-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(102, 192, 244, 0.25);
+}
+
+.lgs-steam-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.82rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--main-border-color, rgba(128, 128, 128, 0.3));
+  color: var(--text-color, inherit) !important;
+  font-weight: 600;
+  font-size: 0.82rem;
+  text-decoration: none !important;
+  background: transparent;
+}
+
+.lgs-steam-btn-secondary:hover {
+  border-color: var(--link-color, #0d6efd);
+  color: var(--link-color, #0d6efd) !important;
+}
+
+@media (max-width: 768px) {
+  .lgs-steam-cta-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .lgs-steam-cta-media {
+    max-height: 190px;
+  }
+
+  #topbar .lgs-lang-switcher {
+    margin-left: 0.25rem;
+  }
+}

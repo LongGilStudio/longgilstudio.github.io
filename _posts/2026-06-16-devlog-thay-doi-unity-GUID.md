@@ -4,6 +4,8 @@ date: 2026-06-16 10:00:00 +0700
 categories: [Game Development, Unity]
 tags: [unity, guid, serialization, assetdatabase, git]
 description: Phân tích chuyên sâu về hệ thống mã định danh GUID và tuần tự hóa YAML trong Unity, cùng giải pháp khắc phục lỗi tham chiếu khi tách nhánh tính năng.
+lang: vi
+translation_id: gilongworld-unity-guid-serialization
 ---
 
 ## **Giới Thiệu Bối Cảnh Hệ Thống và Khủng Hoảng Cấu Trúc Tại Long Gil Studio**

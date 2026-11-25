@@ -1,0 +1,187 @@
+{% comment %}
+  Bilingual (EN/VI) SEO, GEO (Generative Engine Optimization), hreflang,
+  JSON-LD Schema & GilongWorld Marketing Hook
+  Loaded inside <head> by jekyll-theme-chirpy.
+{% endcomment %}
+
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<link rel="help" type="text/plain" href="{{ '/llms.txt' | absolute_url }}" title="LLMs.txt Knowledge Index">
+
+{% if page.layout == 'post' and page.translation_id %}
+  {% assign post_lang = page.lang | default: 'en' %}
+  {% assign counterpart = site.posts
+    | where: "translation_id", page.translation_id
+    | where_exp: "item", "item.url != page.url"
+    | first %}
+  {% assign post_image = page.image.path | default: page.image | default: site.social_preview_image %}
+
+  <link rel="alternate" hreflang="{{ post_lang }}" href="{{ page.url | absolute_url }}">
+  {% if counterpart %}
+    {% assign cp_lang = counterpart.lang | default: 'en' %}
+    <link rel="alternate" hreflang="{{ cp_lang }}" href="{{ counterpart.url | absolute_url }}">
+    {% if post_lang == 'en' %}
+      <link rel="alternate" hreflang="x-default" href="{{ page.url | absolute_url }}">
+    {% else %}
+      <link rel="alternate" hreflang="x-default" href="{{ counterpart.url | absolute_url }}">
+    {% endif %}
+  {% else %}
+    <link rel="alternate" hreflang="x-default" href="{{ page.url | absolute_url }}">
+  {% endif %}
+
+  <meta property="og:locale" content="{% if post_lang == 'vi' %}vi_VN{% else %}en_US{% endif %}">
+  {% if counterpart %}
+    <meta property="og:locale:alternate" content="{% if post_lang == 'vi' %}en_US{% else %}vi_VN{% endif %}">
+  {% endif %}
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": {{ page.url | absolute_url | jsonify }}
+    },
+    "headline": {{ page.title | jsonify }},
+    "description": {{ page.description | default: site.description | strip_newlines | jsonify }},
+    "image": {{ post_image | absolute_url | jsonify }},
+    "inLanguage": {{ post_lang | jsonify }},
+    "url": {{ page.url | absolute_url | jsonify }},
+    "datePublished": {{ page.date | date_to_xmlschema | jsonify }},
+    {% if page.last_modified_at %}
+    "dateModified": {{ page.last_modified_at | date_to_xmlschema | jsonify }},
+    {% endif %}
+    {% if page.tags and page.tags.size > 0 %}
+    "keywords": {{ page.tags | join: ", " | jsonify }},
+    {% endif %}
+    {% if page.categories and page.categories.size > 0 %}
+    "articleSection": {{ page.categories | first | jsonify }},
+    {% endif %}
+    "author": {
+      "@type": "Person",
+      "name": {{ site.social.name | jsonify }},
+      "url": {{ site.gilongworld.website_url | jsonify }}
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": {{ site.title | jsonify }},
+      "url": {{ site.url | jsonify }},
+      "logo": {
+        "@type": "ImageObject",
+        "url": {{ site.social_preview_image | absolute_url | jsonify }}
+      }
+    },
+    {% if counterpart %}
+    {% if post_lang == 'vi' %}
+    "translationOfWork": {
+      "@type": "BlogPosting",
+      "url": {{ counterpart.url | absolute_url | jsonify }},
+      "headline": {{ counterpart.title | jsonify }},
+      "inLanguage": {{ counterpart.lang | default: 'en' | jsonify }}
+    },
+    {% else %}
+    "workTranslation": {
+      "@type": "BlogPosting",
+      "url": {{ counterpart.url | absolute_url | jsonify }},
+      "headline": {{ counterpart.title | jsonify }},
+      "inLanguage": {{ counterpart.lang | default: 'vi' | jsonify }}
+    },
+    {% endif %}
+    {% endif %}
+    "about": {
+      "@type": "VideoGame",
+      "name": "GilongWorld",
+      "url": {{ site.gilongworld.steam_url | jsonify }},
+      "gamePlatform": "PC (Steam)",
+      "applicationCategory": "Game"
+    },
+    "isPartOf": {
+      "@type": "Blog",
+      "name": {{ site.title | jsonify }},
+      "url": {{ site.url | jsonify }}
+    }
+  }
+  </script>
+{% else %}
+  <link rel="alternate" hreflang="en" href="{{ page.url | absolute_url }}">
+  <link rel="alternate" hreflang="vi" href="{{ page.url | absolute_url }}?lang=vi">
+  <link rel="alternate" hreflang="x-default" href="{{ page.url | absolute_url }}">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="vi_VN">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "{{ site.gilongworld.website_url }}/#organization",
+        "name": {{ site.title | jsonify }},
+        "url": {{ site.gilongworld.website_url | jsonify }},
+        "logo": {{ site.social_preview_image | absolute_url | jsonify }},
+        "sameAs": [
+          {{ site.gilongworld.steam_url | jsonify }},
+          {{ site.gilongworld.youtube_url | jsonify }},
+          {{ site.gilongworld.discord_url | jsonify }},
+          "https://github.com/longgilstudio",
+          "https://twitter.com/longgilstudio"
+        ]
+      },
+      {
+        "@type": "Person",
+        "@id": "{{ site.gilongworld.website_url }}/#founder",
+        "name": {{ site.social.name | jsonify }},
+        "url": "{{ site.gilongworld.website_url }}/cv.html",
+        "worksFor": { "@id": "{{ site.gilongworld.website_url }}/#organization" }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "{{ site.url }}/#website",
+        "url": {{ site.url | jsonify }},
+        "name": {{ site.title | jsonify }},
+        "description": {{ site.description | strip_newlines | jsonify }},
+        "inLanguage": ["en", "vi"],
+        "publisher": { "@id": "{{ site.gilongworld.website_url }}/#organization" }
+      },
+      {
+        "@type": "VideoGame",
+        "@id": "{{ site.gilongworld.steam_url }}/#game",
+        "name": "GilongWorld",
+        "description": "Sci-Fi Action RPG featuring Alchemy, Exotic Farming, Mythical Creature Taming, and Base Building, developed in Unity 6 by Long Gil Studio.",
+        "genre": ["Action RPG", "Sci-Fi", "Survival", "Open World"],
+        "gamePlatform": "PC",
+        "operatingSystem": "Windows 10, Windows 11",
+        "url": {{ site.gilongworld.steam_url | jsonify }},
+        "image": {{ site.gilongworld.capsule_image | absolute_url | jsonify }},
+        "author": { "@id": "{{ site.gilongworld.website_url }}/#organization" },
+        "publisher": { "@id": "{{ site.gilongworld.website_url }}/#organization" }
+      }
+    ]
+  }
+  </script>
+{% endif %}
+
+<script>
+  window.__LGS_I18N__ = {
+    defaultLang: {{ site.default_lang | default: 'en' | jsonify }},
+    page: {
+      layout: {{ page.layout | jsonify }},
+      lang: {{ page.lang | jsonify }},
+      translationId: {{ page.translation_id | jsonify }},
+      url: {{ page.url | relative_url | jsonify }}
+    },
+    gilongworld: {{ site.gilongworld | jsonify }},
+    posts: [
+      {% for post in site.posts %}
+      {
+        url: {{ post.url | relative_url | jsonify }},
+        lang: {{ post.lang | default: 'vi' | jsonify }},
+        id: {{ post.translation_id | default: '' | jsonify }},
+        title: {{ post.title | jsonify }}
+      }{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    ]
+  };
+</script>
+
+<link rel="stylesheet" href="{{ '/assets/css/bilingual-gilongworld.css' | relative_url }}">
+<script defer src="{{ '/assets/js/bilingual-gilongworld.js' | relative_url }}"></script>

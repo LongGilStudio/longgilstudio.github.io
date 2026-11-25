@@ -1,9 +1,11 @@
 ---
-layout: post
 title: "Hướng Dẫn Sao Lưu Dự Án Unity Sang Ổ Cứng Rời Bằng Git Bare Repository"
-date: 2026-08-22
-categories: [Git, Unity, Tutorial]
+date: 2026-08-22 10:00:00 +0700
+categories: [Game Development, Unity]
 tags: [git, backup, unity, bare-repository, usb]
+description: Hướng dẫn từng bước thiết lập Git Bare Repository trên ổ cứng di động (USB) kèm Git LFS để sao lưu an toàn dự án Unity và xử lý các lỗi thường gặp.
+lang: vi
+translation_id: unity-git-bare-repository-usb-backup
 ---
 
 Tài liệu này tổng hợp toàn bộ quy trình, lệnh chuẩn xác, và các lỗi thường gặp trong quá trình thiết lập một **Bare Git Repository** trên ổ cứng di động (USB) để làm nơi sao lưu (backup) an toàn cho dự án Unity.

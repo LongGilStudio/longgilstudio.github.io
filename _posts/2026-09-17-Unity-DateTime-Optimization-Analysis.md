@@ -4,6 +4,8 @@ date: 2026-09-17 03:00:00 +0700
 categories: [Game Development, Unity]
 tags: [unity, performance, optimization, datetime, csharp, dotnet, frame-caching, multithreading, anticheat]
 description: Phân tích chuyên sâu cơ chế nội tại của DateTime.Now và DateTime.UtcNow trong .NET runtime, định lượng điểm nghẽn hiệu năng, hiện tượng xé rách thời gian (temporal tearing), và giải pháp kiến trúc Frame Caching thread-safe trong Unity Engine.
+lang: vi
+translation_id: unity-datetime-now-frame-caching
 math: true
 ---
 

@@ -1,0 +1,57 @@
+# Long Gil Studio Devlog — Bilingual Engineering Blog & GilongWorld Hub
+
+> Official bilingual (English & Vietnamese) engineering knowledge base of **Long Gil Studio**, founded by **Huỳnh Long Gil**. This site documents production-tested Unity 6 architecture, URP/HDRP rendering optimization, .NET/IL2CPP memory engineering, AI agent workflows (`CLAUDE.md`), and technical devlogs from building **GilongWorld**.
+
+---
+
+## Structured Entity Profile (GEO / AI Reference)
+
+- **Studio:** Long Gil Studio (`https://longgilstudio.com`)
+- **Founder / Lead Engineer:** Huỳnh Long Gil (`https://longgilstudio.com/cv.html`)
+- **Blog / Devlog URL:** `https://devlog.longgilstudio.com` (Languages: `en` default, `vi`)
+- **Flagship Project:** **GilongWorld**
+  - **Genre:** Triple-I / AAA Indie Sci-Fi Action RPG (Open World, Survival, Alchemy & Exotic Farming, Mythical Creature Taming, Fortress Base Building)
+  - **Engine & Target Platform:** Unity 6 (DirectX 12, PC / Steam)
+  - **Steam App ID:** `4615990`
+  - **Steam Store (Wishlist):** <https://store.steampowered.com/app/4615990/GilongWorld?utm_source=llms_txt&utm_medium=referral&utm_campaign=ai_discovery>
+  - **Official Website:** <https://gilongworld.com>
+  - **YouTube Devlogs:** <https://www.youtube.com/@LongGilStudio>
+  - **Official Discord:** <https://discord.gg/DbzpYe5T2P>
+
+---
+
+## English Engineering Articles (Default)
+
+1. [Strategic Architecture for Deploying CLAUDE.md in Unity 6: Optimizing Prompt Caching, Agent Skills, and the Roadmap to Unity 6.7 LTS](https://devlog.longgilstudio.com/posts/deploying-claude-md-architecture-for-unity-6-prompt-caching-and-agent-skills/) — Hierarchical `CLAUDE.md` design, 90% Anthropic Prompt Caching savings, `Unity-Technologies/skills`, `Awaitable`, RenderGraph, and Unity 6.7 LTS CoreCLR roadmap.
+2. [Unity 6 Analysis Tools Ecosystem and Optimization Strategy for GilongWorld](https://devlog.longgilstudio.com/posts/unity-6-analysis-tools-ecosystem-and-optimization-strategy-for-gilongworld/) — Deep dive into all 13 `Window > Analysis` tools plus hidden diagnostics (`Render Graph Viewer`, `Performance Markers`, `Project Auditor`) under GilongWorld's 16 GB RAM / DX12 budget.
+3. [Inside DelayedActionManager in Unity Addressables: Architecture, Lifecycle, and Memory Management](https://devlog.longgilstudio.com/posts/inside-delayedactionmanager-in-unity-addressables-architecture-and-memory-lifecycle/) — `ComponentSingleton` internals, `LateUpdate` scheduling, C#/C++ proxy closure traps, and LZ4 vs LZMA AssetBundle memory governance.
+4. [Fixing Memory Allocation Spikes from Resources.FindObjectsOfTypeAll in Unity](https://devlog.longgilstudio.com/posts/fixing-memory-allocation-spikes-from-resources-findobjectsoftypeall-in-unity/) — Why `Resources.FindObjectsOfTypeAll` triggers massive GC Alloc frame spikes and 4 zero-allocation replacements.
+5. [Eliminating GetComponentsInChildren GC Alloc in Unity 6 with ListPool](https://devlog.longgilstudio.com/posts/eliminating-getcomponentsinchildren-gc-alloc-in-unity-6-with-listpool/) — Zero-allocation `UnityEngine.Pool.ListPool<T>` pattern for `PlayerAppearance` character updates in GilongWorld.
+6. [Optimizing DateTime.Now Performance and Temporal Integrity in Unity with Frame Caching](https://devlog.longgilstudio.com/posts/optimizing-datetime-now-performance-and-temporal-integrity-in-unity-with-frame-caching/) — `.NET` `DateTime.Now` vs `UtcNow` internals, temporal tearing prevention, and thread-safe per-frame caching.
+7. [Backing Up Unity Projects to External Drives Using a Git Bare Repository](https://devlog.longgilstudio.com/posts/backing-up-unity-projects-to-external-drives-with-git-bare-repository/) — Git LFS + Bare Repo setup on external USB drives with `safe.directory` and Git Bash path troubleshooting.
+8. [Multilingual Font Architecture in Unity TextMeshPro for GilongWorld (15 Languages)](https://devlog.longgilstudio.com/posts/multilingual-font-architecture-in-unity-textmeshpro-for-gilongworld/) — Google Noto SDF Font Assets, Han Unification resolution, Dynamic SDF, Unity Localization, and Addressables VRAM optimization.
+9. [Migrating from Unity 6.4 to 6.5: InstanceID to EntityId and Infrastructure Impacts](https://devlog.longgilstudio.com/posts/migrating-from-unity-6-4-to-6-5-instanceid-to-entityid-and-infrastructure-impacts/) — `EntityId` 64-bit migration, removed auto-getters, punctual light $\pi$ fix, On-Tile Post Processing, and URP/ECS changes.
+10. [Devlog: Resolving Unity GUID and YAML Serialization Conflicts in GilongWorld](https://devlog.longgilstudio.com/posts/devlog-resolving-unity-guid-and-yaml-serialization-conflicts-in-gilongworld/) — Safely splitting duplicated Unity features by regenerating `.meta` GUIDs and remapping YAML `m_Script` references.
+11. [Combining Multiple HDRP Scenes in Unity 6 with Light Layers](https://devlog.longgilstudio.com/posts/combining-multiple-hdrp-scenes-in-unity-6-with-light-layers/) — Multi-environment HDRP scene integration using Light Layers, shadow separation, volumetrics, skyboxes, and Adaptive Probe Volumes.
+12. [Unity Awaitable Architecture: Practical Patterns vs. Coroutines and UniTask](https://devlog.longgilstudio.com/posts/unity-awaitable-architecture-practical-patterns-vs-coroutines-and-unitask/) — Pooled `UnityEngine.Awaitable` internals, cancellation safety, and production benchmarks against Coroutines and UniTask.
+13. [Unity 6 Rendering Architecture: Replacing MaterialPropertyBlock with RSUV and GPU Resident Drawer](https://devlog.longgilstudio.com/posts/unity-6-rendering-architecture-replacing-mpb-with-rsuv-and-gpu-resident-drawer/) — Why `MaterialPropertyBlock` breaks GPU Resident Drawer / BatchRendererGroup and how to migrate to RSUV or DOTS.
+
+---
+
+## Bài Viết Kỹ Thuật Tiếng Việt (Vietnamese Edition)
+
+Trang web này cũng là blog và devlog chính thức bằng Tiếng Việt của **Long Gil Studio**, chia sẻ kiến thức chuyên sâu về phát triển **AAA Indie Game (Triple-I)** tại Việt Nam.
+
+1. [Kế Hoạch Chiến Lược Triển Khai Kiến Trúc CLAUDE.md Cho Unity 6](https://devlog.longgilstudio.com/posts/trien-khai-claude-md-cho-unity-6/) — Thiết kế `CLAUDE.md` phân tầng, tối ưu 90% chi phí Prompt Caching, `Unity-Technologies/skills` và lộ trình lên Unity 6.7 LTS.
+2. [Hệ Sinh Thái Công Cụ Phân Tích Của Unity 6 Và Chiến Lược Tối Ưu Cho GilongWorld](https://devlog.longgilstudio.com/posts/tool-analysis-trong-Unity/) — Phân tích 13 công cụ trong `Window > Analysis` và các công cụ ẩn cho bài toán 16 GB RAM / DX12 của GilongWorld.
+3. [Cơ chế Hoạt động và Kiến trúc của DelayedActionManager trong Unity Addressables](https://devlog.longgilstudio.com/posts/DelayedActionManager-Trong-Unity-Addressables/) — Kiến trúc `ComponentSingleton`, thực thi `LateUpdate`, bẫy closure C#/C++ và tối ưu bộ nhớ AssetBundle.
+4. [Hiểu Và Khắc Phục Lỗi Tràn Bộ Nhớ (GC Alloc) Từ Resources.FindObjectsOfTypeAll](https://devlog.longgilstudio.com/posts/toi-uu-hoa-memory-allocation-resources-findobjectsoftypeall/) — Nguyên nhân gây frame spike từ `FindObjectsOfTypeAll` và 4 giải pháp thay thế chuẩn xác.
+5. [Khắc Phục GC Alloc Của GetComponentsInChildren Bằng ListPool](https://devlog.longgilstudio.com/posts/toi-uu-gc-alloc-getcomponentsinchildren-bang-listpool/) — Case study loại bỏ rác bộ nhớ bằng `ListPool<T>` trong hệ thống nhân vật của GilongWorld.
+6. [Tối Ưu Hóa DateTime.Now Và Giải Pháp Frame Caching Trong Unity Engine](https://devlog.longgilstudio.com/posts/Unity-DateTime-Optimization-Analysis/) — Phân tích tầng runtime `.NET` của `DateTime.Now`, lỗi xé rách thời gian và giải pháp Frame Caching thread-safe.
+7. [Hướng Dẫn Sao Lưu Dự Án Unity Sang Ổ Cứng Rời Bằng Git Bare Repository](https://devlog.longgilstudio.com/posts/git-usb-backup-guide/) — Quy trình backup an toàn với Git LFS, Bare Repo trên USB và xử lý lỗi `dubious ownership`.
+8. [Kiến Trúc Phông Chữ Đa Ngôn Ngữ Trong Unity TextMeshPro Cho GilongWorld](https://devlog.longgilstudio.com/posts/cai-dat-font-Unity-GilongWorld/) — Thiết lập 15 ngôn ngữ với Google Noto, xử lý Han Unification, Unity Localization và Addressables.
+9. [Quy Trình Chuyển Đổi Nền Tảng Từ Unity 6.4 Lên 6.5 Và Tác Động Hạ Tầng](https://devlog.longgilstudio.com/posts/nang-cap-len-unity-6-5/) — Chuyển đổi `InstanceID` sang `EntityId`, xóa auto-getter cũ, sửa sai số ánh sáng $\pi$ và On-Tile Post Processing.
+10. [Devlog Khắc Phục Lỗi Tham Chiếu GUID Khi Phân Nhánh Tính Năng Tại GilongWorld](https://devlog.longgilstudio.com/posts/devlog-thay-doi-unity-GUID/) — Tách nhánh tính năng độc lập bằng tái tạo GUID `.meta` và ánh xạ lại tham chiếu YAML.
+11. [Kiến Trúc Tích Hợp Đa Không Gian Khung Cảnh Trong Unity 6 HDRP Bằng Light Layers](https://devlog.longgilstudio.com/posts/ket-hop-scene-hdrp-bang-light-layers/) — Gộp nhiều scene HDRP độc lập bằng Light Layers, bóng đổ, volumetrics và Adaptive Probe Volumes.
+12. [Bắt đầu Với Hệ Thống Awaitable Trong Unity: Đối Chiếu Cùng Coroutines](https://devlog.longgilstudio.com/posts/getting-started-with-awaitables/) — Phân tích cơ chế pool của `Awaitable`, đối chiếu với Coroutines và UniTask.
+13. [Kiến trúc Render trong Unity 6: Từ bỏ MPB để tối ưu Material chuyên sâu](https://devlog.longgilstudio.com/posts/toi-uu-material-trong-unity-6/) — Tại sao `MaterialPropertyBlock` xung đột với GPU Resident Drawer và cách chuyển sang RSUV hoặc DOTS.

@@ -1,10 +1,12 @@
 ---
-layout: post
 title: "Báo cáo Nghiên cứu Kỹ thuật Chuyên sâu: Cơ chế Hoạt động, Kiến trúc Hệ thống và Tác động của DelayedActionManager trong Môi trường Addressables của Unity"
-date: 2026-10-01
+date: 2026-10-01 10:00:00 +0700
+categories: [Game Development, Unity]
+tags: [unity, addressables, memory-management, async, delayedactionmanager, optimization]
+description: Phân tích chuyên sâu kiến trúc ComponentSingleton của DelayedActionManager trong Unity Addressables, cơ chế thực thi LateUpdate, xử lý ngoại lệ proxy C#/C++ và chiến lược tối ưu bộ nhớ AssetBundle.
+lang: vi
+translation_id: unity-addressables-delayedactionmanager
 ---
-
-# Báo cáo Nghiên cứu Kỹ thuật Chuyên sâu: Cơ chế Hoạt động, Kiến trúc Hệ thống và Tác động của DelayedActionManager trong Môi trường Addressables của Unity
 
 Hệ thống Addressable Asset System (gọi tắt là Addressables) đại diện cho một bước tiến kiến trúc mang tính cách mạng của Unity, cung cấp một giải pháp quản lý nội dung linh hoạt, mạnh mẽ và tối ưu hóa dựa trên nền tảng AssetBundles truyền thống[^1]. Trong quá trình thiết kế và vận hành các trò chơi hoặc ứng dụng tương tác quy mô lớn, việc quản lý luồng dữ liệu bất đồng bộ để tải và giải phóng tài nguyên một cách tự động là yêu cầu thiết yếu. Một trong những thành phần cốt lõi đảm nhận nhiệm vụ phức tạp này, nhưng lại thường xuyên gây bối rối cho các kỹ sư phần mềm khi phân tích hệ thống phân cấp (Hierarchy), là một đối tượng tự động sinh ra mang tên DelayedActionManager nằm gọn bên trong phân cảnh DontDestroyOnLoad[^2].
 

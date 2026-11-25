@@ -4,6 +4,8 @@ date: 2026-04-25 10:00:00 +0700
 categories: [Game Development, Unity]
 tags: [unity6, awaitable, async, coroutines, optimization]
 description: Phân tích hệ thống Awaitable trong Unity, đối chiếu với Coroutines và UniTask, cùng chiến lược áp dụng an toàn trong dự án thực tế.
+lang: vi
+translation_id: unity6-awaitable-vs-coroutines
 ---
 
 {% include embed/youtube.html id='eXkFPoEp3BA' %}

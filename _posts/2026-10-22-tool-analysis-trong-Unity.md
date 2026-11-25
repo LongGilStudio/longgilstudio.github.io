@@ -4,6 +4,8 @@ date: 2026-10-22 03:00:00 +0700
 categories: [Game Development, Unity]
 tags: [unity, performance, profiler, optimization, analysis, urp, render-graph, gilongworld]
 description: Phân tích toàn diện 13 công cụ trong menu Window > Analysis của Unity 6, các công cụ ẩn chuyên sâu và chiến lược tối ưu hóa hiệu năng thực chiến cho dự án thế giới mở GilongWorld.
+lang: vi
+translation_id: unity6-analysis-tools-gilongworld
 ---
 
 ## **Phân tích Đặc thù Kỹ thuật và Bài toán Hiệu năng của GilongWorld**

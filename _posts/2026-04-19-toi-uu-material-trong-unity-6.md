@@ -4,6 +4,8 @@ date: 2026-04-19 12:00:00 +0700
 categories: [Game Development, Unity]
 tags: [unity6, rendering, optimization, shaders, dots, longgilstudio]
 description: Phân tích toàn diện về sự chuyển dịch kiến trúc từ MaterialPropertyBlock sang RSUV và GPU Resident Drawer để đạt hiệu suất AAA trong Unity 6.
+lang: vi
+translation_id: unity6-material-rsuv-grd
 math: true
 ---
 

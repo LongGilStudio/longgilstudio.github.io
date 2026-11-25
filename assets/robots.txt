@@ -1,0 +1,37 @@
+---
+layout: null
+permalink: /robots.txt
+---
+User-agent: *
+Disallow: /norobots/
+
+# GEO / AI Search Crawlers (explicitly welcome for technical Unity 6 & GilongWorld indexing)
+User-agent: GPTBot
+Allow: /
+Disallow: /norobots/
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /norobots/
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /norobots/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /norobots/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /norobots/
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /norobots/
+
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /norobots/
+
+Sitemap: {{ '/sitemap.xml' | absolute_url }}

@@ -4,6 +4,8 @@ date: 2026-08-20 10:00:00 +0700
 categories: [Game Development, Unity]
 tags: [unity, textmeshpro, tmp, localization, font, sdf, addressables, cjk, vietnamese, gilongworld]
 description: Hướng dẫn kỹ thuật chuyên sâu về kiến trúc phông chữ đa ngôn ngữ (15 ngôn ngữ), quy trình tạo TextMeshPro SDF Font Asset, xử lý Han Unification, tích hợp Unity Localization và tối ưu bộ nhớ VRAM với Addressables.
+lang: vi
+translation_id: gilongworld-tmp-multilingual-font-architecture
 ---
 
 ## **1. Tổng Quan Dự Án Và Thách Thức Nội Địa Hóa Thời Gian Thực**
@@ -219,6 +221,17 @@ Nhằm giải phóng lập trình viên khỏi việc xuất CSV và lọc ký t
 - **Cơ chế 1 (Trích xuất Primary):** Quét toàn bộ `StringTableCollections` trong Unity Localization, gom toàn bộ chuỗi văn bản đang được sử dụng vào cấu trúc `HashSet<char>` (đảm bảo tính độc nhất 100%), sắp xếp theo mã Unicode tăng dần và ghi vào 4 file Primary trong `02_CJK/`.
 - **Cơ chế 2 (Tự động trừ ký tự Fallback):** Script tự động đọc 7 bộ dữ liệu từ `Standard_Fallbacks/`, đối chiếu và **loại bỏ toàn bộ các ký tự đã có trong Primary Asset**, sau đó xuất ra thư mục `Subtracted_Fallbacks/`. Điều này triệt tiêu hoàn toàn sự lãng phí VRAM do trùng lặp ký tự giữa Primary Atlas và Fallback Atlas.
 
+#### **Giao Diện GWSDFGeneratorWindow Và Vượt Rào API Của Unity 6**
+Để đảm bảo quy tắc "Tỷ lệ Sampling / Padding = 12" được tuân thủ tuyệt đối, dự án cung cấp một Editor Window chuyên biệt cho phép nhập tham số và tự động tính toán cảnh báo nếu tỷ lệ bị sai lệch. 
+Đặc biệt, trong Unity 6, thuộc tính `clearDynamicDataOnBuild` của Font Asset đã bị khóa ở cấp độ truy cập `internal`, ngăn cản việc xóa dữ liệu rác trước khi build qua code thông thường. Công cụ này giải quyết triệt để vấn đề bằng cách áp dụng kỹ thuật Phản chiếu (Reflection) qua `SerializedObject`:
+
+```csharp
+var serializedObject = new SerializedObject(fontAsset);
+serializedObject.FindProperty("m_ClearDynamicDataOnBuild").boolValue = true;
+serializedObject.ApplyModifiedProperties();
+```
+Nhờ đó, Atlas 137MB bị lỗi của hệ thống cũ được dọn sạch hoàn toàn, đưa dung lượng build về mức tối giản.
+
 ---
 
 ## **6. Kiến Trúc Quản Lý Chuỗi Dự Phòng (Fallback Chain) Và Giải Pháp Han Unification**
@@ -261,11 +274,13 @@ Gói **Unity Localization** (`com.unity.localization`) cung cấp các công c�
 
 Có hai phương pháp triển khai:
 
-### **Phương Pháp 1: Lập Trình Điều Khiển Sự Kiện (Script-driven Mapping)**
+### **Phương Pháp 1: Lập Trình Quản Lý Tập Trung (Centralized Font Manager)**
 
-Một `ScriptableObject` hoặc `Dictionary` đóng vai trò làm bảng ánh xạ (*Mapping Table*) sẽ được xây dựng, liên kết mã ngôn ngữ ISO (như `en`, `vi`, `ja`, `zh-Hans`) với tệp `TMP_FontAsset` tương ứng. Khi sự kiện `SelectedLocaleChanged` kích hoạt, một trình quản lý toàn cục (*Global Manager*) sẽ duyệt qua tất cả các thành phần UI đang hoạt động và cập nhật trực tiếp thuộc tính `textMeshPro.font = mappedFontAsset`[^22]:
-- Nếu Locale chuyển sang `ja` (Japanese), thành phần UI sẽ được gán Primary Font là `Font_CJK_JP_SDF`.
-- Nếu Locale chuyển sang `vi` (Vietnamese) hoặc `en` (English), nó được gán trở lại `Global_Latin_Cyrillic_SDF`.
+Thay vì gán sự kiện Localized Asset cho hàng ngàn thành phần UI Text thủ công (gây áp lực khổng lồ lên bộ nhớ do lượng lớn các đối tượng `MonoBehaviour` rác và quá trình Garbage Collection), dự án GilongWorld áp dụng chiến lược **Quản lý Tập trung bằng Addressables**. 
+
+Script `GWFontManager.cs` (mang cờ `DontDestroyOnLoad`) sẽ lắng nghe sự kiện `LocalizationSettings.SelectedLocaleChanged`. Khi sự kiện này kích hoạt, Manager thực hiện hai tác vụ tinh vi:
+1. **Tải Bất Đồng Bộ (Async Load):** Sử dụng `LocalizationSettings.AssetDatabase.GetLocalizedAssetAsync<TMP_FontAsset>("Fonts_Table", "PrimaryFont")` để kéo Font Asset chuẩn của ngôn ngữ hiện tại từ Addressables về.
+2. **Quét Toàn Cục (Global Sweep):** Dùng lệnh `FindObjectsByType<TMP_Text>` để quét qua toàn bộ Scene và ép Font mới vào tất cả UI Text. Lệnh này tốn vài mili-giây CPU nhưng chỉ chạy đúng một lần duy nhất lúc chuyển ngôn ngữ hoặc Load Scene, bù lại giải phóng hoàn toàn bộ nhớ RAM khỏi sự đeo bám của hàng ngàn Component lẻ tẻ. Ngay sau khi gán xong, Font của ngôn ngữ cũ sẽ được dọn dẹp bằng lệnh `Addressables.Release()`.
 
 Phương pháp này loại bỏ hoàn toàn hiện tượng "ô nhiễm chéo" (*cross-pollination*) giữa các ngôn ngữ CJK do hệ thống Fallback chỉ nạp duy nhất Atlas của ngôn ngữ đang được chỉ định[^7].
 
@@ -281,30 +296,30 @@ Cách tiếp cận này yêu cầu cấu hình trên Inspector nhưng mang lại
 
 Kiến trúc tĩnh (*Static Architecture*) đã giải quyết hoàn hảo vấn đề giao diện hệ thống. Tuy nhiên, nội dung do người dùng tạo ra (**User-Generated Content - UGC**), chẳng hạn như tên nhân vật, mô tả bang hội, hoặc khung chat cộng đồng, lại mang đến một thách thức lớn hơn. Không thể lường trước được người dùng sẽ nhập những ký tự nào từ bảng 15 ngôn ngữ, và việc nhúng toàn bộ hàng trăm nghìn ký tự của thế giới vào RAM là bất khả thi.
 
-### **Giải Pháp Dynamic SDF System**
+### **Giải Pháp Kiến Trúc Lai (Hybrid SDF System)**
 
-Hệ thống **Dynamic SDF** của TextMeshPro cho phép một Font Asset khởi đầu với một Atlas kết cấu rỗng ($0 \times 0$ pixel). Khi hệ thống TextMeshPro phát hiện một ký tự mới chưa từng được vẽ, nó truy cập tệp `.ttf` hoặc `.otf` gốc đính kèm, sử dụng CPU để vẽ ký tự đó dưới dạng SDF, và chèn nó vào một khoảng trống trên Atlas ở thời gian thực[^6].
+Hệ thống **Dynamic SDF** của TextMeshPro thông thường cho phép một Font Asset khởi đầu với một Atlas kết cấu rỗng ($0 \times 0$ pixel). Khi phát hiện ký tự mới, nó dùng CPU vẽ ký tự đó ra và chèn vào kết cấu ở thời gian thực[^6].
+Tuy nhiên, nếu lạm dụng hoàn toàn Dynamic, game sẽ bị giật lag (frame spike) dữ dội ở màn hình đầu tiên. Do đó, dự án GilongWorld áp dụng **Kiến trúc Lai (Hybrid)**:
 
-Để vận hành hệ thống chat đa ngôn ngữ trong GilongWorld:
-1. Tạo một Dynamic Font Asset, ví dụ `Dynamic_Chat_Fallback_SDF.asset`.
-2. Bật tính năng **Multi Atlas Texture** trong cửa sổ *Generation Settings* của asset này[^5]. Khi Atlas đầu tiên bị lấp đầy, tính năng này cho phép TextMeshPro tự động cấp phát thêm các Atlas bổ sung, ngăn ngừa hiện tượng cạn kiệt không gian kết cấu (*atlas exhaustion*) và làm xuất hiện các ô vuông Tofu[^6].
-3. Dynamic Font Asset này sẽ được gán làm Fallback cuối cùng cho các thành phần UI tiếp nhận nội dung UGC[^5].
+1. **Nạp tĩnh mượt mà (Static Population):** Thông qua công cụ `GWCharacterExtractor.cs`, hàng ngàn ký tự thông dụng nhất được ép sẵn vào Atlas bằng hàm `TryAddCharacters` ngay từ trong Editor. Khi vào game, các ký tự này đã có sẵn, đảm bảo tốc độ khung hình (FPS) tuyệt đối ổn định.
+2. **Cơ chế Động an toàn (Dynamic Fallback):** Font Asset vẫn được lưu ở chế độ Dynamic với cờ `isMultiAtlasTexturesEnabled = true`. Nếu người chơi chat một chữ quá hiếm chưa từng có trong Atlas đầu tiên, TMP sẽ lập tức "đẻ" thêm một Atlas Texture mới (`Atlas 0 1`, `Atlas 0 2`...) để nhét chữ đó vào thay vì hiển thị ô vuông Tofu. Đây là sự kết hợp hoàn hảo nhất.
 
 > [!CAUTION]
-> Phương pháp Dynamic SDF đi kèm với chi phí tài nguyên: xuất hiện các đợt giật khung hình (*frame spike*) nhẹ nếu hàng chục ký tự CJK phức tạp xuất hiện cùng lúc trong khung hình đầu tiên[^1]. Hơn nữa, mỗi Atlas động kích thước $4096 \times 4096$ sẽ lập tức tiêu tốn khoảng **16MB** bộ nhớ hệ thống, và hai Atlas như vậy sẽ chiếm **32MB**, tạo ra áp lực lớn đối với các thiết bị di động[^31].
+> Phương pháp Dynamic SDF đi kèm với chi phí tài nguyên: Mỗi Atlas động kích thước $2048 \times 2048$ sẽ lập tức tiêu tốn khoảng **4MB** bộ nhớ hệ thống. Nếu có nhiều Atlas phụ sinh ra, áp lực lên thiết bị di động sẽ tăng cao[^31].
 
-### **Rò Rỉ Bộ Nhớ Và Xung Đột Với Hệ Thống Addressables**
+### **Cái Bẫy Addressables Ngầm Và Xung Đột Bộ Nhớ VRAM**
 
-Các dự án quy mô lớn hiện đại như GilongWorld gần như chắc chắn sử dụng hệ thống **Addressables** để tải tài nguyên (*asset bundles*) từ xa nhằm giảm dung lượng bộ cài đặt ban đầu[^32]. TextMeshPro, được thiết kế từ thời kỳ đầu của Unity, mang đặc thù phụ thuộc nặng nề vào kiến trúc thư mục `Resources` (điển hình là tệp cấu hình `TMP_Settings` và một số font mặc định)[^32].
+Các dự án quy mô lớn hiện đại như GilongWorld gần như chắc chắn sử dụng hệ thống **Addressables** để tải tài nguyên. Một sai lầm chết người rất nhiều lập trình viên mắc phải là: **Cho rằng mình chưa bật Addressables nên cứ để Font vô tư trong thư mục `Resources`.**
 
-Khi một UI Prefab được đóng gói qua Addressables nhưng lại tham chiếu đến một Font Asset nằm trong thư mục `Resources`, trình quản lý đóng gói của Unity sẽ phạm sai lầm sao chép dữ liệu (*duplicate assets*):
+Thực tế, gói **Unity Localization được xây dựng trực tiếp trên nền tảng Addressables**. Dù bạn không chủ động dùng, Addressables vẫn đang chạy ngầm để quản lý String Tables. 
+Khi một UI Prefab được đóng gói qua Addressables nhưng lại tham chiếu đến một Font Asset nằm trong thư mục `Resources`, trình quản lý của Unity sẽ phạm sai lầm sao chép dữ liệu (*duplicate assets*):
 1. Unity tạo ra một bản sao hoàn chỉnh của kết cấu Atlas đó và nhét vào bên trong AssetBundle của Addressables[^32].
-2. Khi trò chơi tải Prefab này, Atlas từ `Resources` đã được tải sẵn ở bộ nhớ khởi động, và Atlas từ AssetBundle lại tiếp tục được nạp thêm vào RAM, dẫn đến việc **VRAM bị chiếm dụng gấp đôi** một cách lãng phí[^31]. Sự cố này cực kỳ phổ biến và có thể dễ dàng làm sập các ứng dụng di động vốn kiểm soát chặt chẽ dung lượng RAM tối đa[^33].
+2. Khi trò chơi tải, Atlas từ `Resources` đã được tải sẵn, và Atlas từ AssetBundle lại tiếp tục được nạp thêm vào RAM, dẫn đến việc **VRAM bị chiếm dụng gấp đôi** một cách lãng phí[^31]. Sự cố này cực kỳ phổ biến và có thể dễ dàng làm sập các ứng dụng di động vốn kiểm soát chặt chẽ dung lượng RAM tối đa[^33].
 
 **Giải pháp triệt để:**
-- Di dời hoàn toàn tệp `TMP_Settings` và tất cả các Font Asset ra khỏi thư mục `Resources`, đưa chúng vào các thư mục tiêu chuẩn như `Assets/GilongWorld_Resources/Fonts/`, và gán chúng vào các Addressables Groups chuyên biệt[^1].
-- Khi trò chơi khởi động, một đoạn mã khởi động (*bootstrap script*) sẽ sử dụng `Addressables.LoadAssetAsync` để nạp các tài nguyên này vào hệ thống và chủ động tiêm (*inject*) dữ liệu vào TextMeshPro thông qua kỹ thuật phản chiếu (*Reflection*) nếu cần thiết, đảm bảo chỉ có một bản thể duy nhất của Atlas tồn tại trong vùng nhớ chia sẻ[^32].
-- **Làm sạch Dynamic Font trong Editor:** Các tệp Dynamic Font Asset mang đặc tính dữ liệu bền vững (*persistent data*) trong môi trường Editor. Khi các ký tự mới được vẽ vào lúc chạy thử, Atlas sẽ phình to ra và giữ nguyên dung lượng đó trong file asset. Bắt buộc phải thực hiện thao tác nhấp chuột phải vào các Dynamic Font Asset và chọn **Reset** trong context menu để xóa sổ Atlas, đưa độ phân giải về $0 \times 0$ trước mỗi lần biên dịch bản build (*build process*)[^30].
+- Di dời hoàn toàn tệp `TMP_Settings` và tất cả các Font Asset ra khỏi thư mục `Resources`, đưa chúng vào thư mục tiêu chuẩn `Assets/_GilongWorld/_Project/Art/Fonts/SDF/`.
+- Quét chọn tất cả các file SDF này và ném chúng vào một Group Addressables chuyên biệt (ví dụ `Fonts_Addressables`), đồng thời thiết lập ánh xạ trong bảng **Asset Table** (`Fonts_Table`) của Localization.
+- **Làm sạch Dynamic Font trong Editor:** Các tệp Dynamic Font Asset mang đặc tính dữ liệu bền vững. Bắt buộc phải thực hiện thao tác xóa dữ liệu Dynamic trước mỗi lần biên dịch bản build (đã được tự động hóa qua công cụ `GWSDFGeneratorWindow` sử dụng kỹ thuật `SerializedObject` kể trên)[^30].
 - **Dọn dẹp bộ nhớ Runtime:** Khi chuyển đổi giữa các Scene lớn, gọi API `TMP_FontAsset.ClearFontAssetData(true)` hoặc `FontEngine.DestroyFontEngine()` để giải phóng triệt để các mảng texture động không còn sử dụng[^35].
 
 ---
