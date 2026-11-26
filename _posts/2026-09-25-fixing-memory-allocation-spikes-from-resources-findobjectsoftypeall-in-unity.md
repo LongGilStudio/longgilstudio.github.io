@@ -39,15 +39,15 @@ To resolve this issue once and for all, depending on your use case, you can appl
 The fastest approach—costing 0 CPU and 0 RAM—is to **avoid searching altogether**. Instead of writing code to look up an object at runtime, declare a `public` or `[SerializeField]` field and drag-and-drop the object into it directly inside the Unity Inspector.
 
 ```csharp
-// ❌ TRÁNH: Tìm kiếm tốn kém
+// ❌ AVOID: Expensive lookup
 void Start() {
-    // Hàm này sẽ tạo ra GC Alloc
+    // This call causes GC Alloc
     myManager = (GameManager)Resources.FindObjectsOfTypeAll(typeof(GameManager))[0]; 
 }
 
-// ✅ TỐT NHẤT: Tham chiếu trực tiếp
+// ✅ BEST: Direct Inspector reference
 [SerializeField] private GameManager myManager; 
-// (Kéo thả GameManager vào ô này trên Unity Editor)
+// (Drag and drop GameManager into this slot in the Unity Editor)
 ```
 
 ### **Method 2: Caching and the Singleton Pattern**
@@ -56,22 +56,22 @@ If you must look up an object in code, **search only once** (for example, in `Aw
 For shared systems such as `UIManager` or `AudioManager`, use the Singleton pattern or a static property for global access with zero lookup overhead.
 
 ```csharp
-// ❌ TRÁNH: Gọi hàm tìm kiếm liên tục mỗi khi cần text
+// ❌ AVOID: Repeatedly searching every time text is needed
 public string GetLocalizedText(string key) {
     UIManager tempUIM = (UIManager)Resources.FindObjectsOfTypeAll(typeof(UIManager))[0];
     return tempUIM.GetText(key);
 }
 
-// ✅ TỐT HƠN: Lưu Cache vào biến static (chỉ tìm 1 lần)
+// ✅ BETTER: Cache into a static variable (search only once)
 public static UIManager SharedUIManager;
 
 void Awake() {
     if (SharedUIManager == null) 
-        SharedUIManager = FindAnyObjectByType<UIManager>(); // Tìm 1 lần
+        SharedUIManager = FindAnyObjectByType<UIManager>(); // Search once
 }
 
 public string GetLocalizedText(string key) {
-    return SharedUIManager.GetText(key); // Dùng lại ngay lập tức, 0 chi phí
+    return SharedUIManager.GetText(key); // Instant reuse, zero overhead
 }
 ```
 
@@ -79,7 +79,7 @@ public string GetLocalizedText(string key) {
 Previously, in early Unity 2023 releases when replacing `FindObjectsOfType`, Unity used the `FindObjectsSortMode` enum:
 
 ```csharp
-// ⚠️ Cũ (Unity 2023.1 - 2023.2):
+// ⚠️ Legacy (Unity 2023.1 - 2023.2):
 var managers = FindObjectsByType<GameManager>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
 ```
 
@@ -88,14 +88,14 @@ However, **starting from Unity 6 onward, the `FindObjectsSortMode` enum has offi
 According to official Unity 6 documentation, you should use the following standardized overloads:
 
 ```csharp
-// ❌ Cũ (Unity 2022 trở về trước - Chậm, ép buộc sắp xếp mảng)
+// ❌ Legacy (Unity 2022 and earlier - Slow, forces array sorting)
 var managers = FindObjectsOfType<GameManager>();
 
-// ✅ Chuẩn Unity 6: Lấy 1 object bất kỳ (Nhanh nhất, Zero-Alloc)
-// Không cấp phát mảng trên Heap, trả về ngay object đầu tiên tìm thấy
+// ✅ Unity 6 Standard: Get any single object (Fastest, Zero-Alloc)
+// Does not allocate an array on the Heap; returns the first matching object immediately
 var manager = FindAnyObjectByType<GameManager>(); 
 
-// ✅ Chuẩn Unity 6: Lấy danh sách nhiều object (Không cần tham số SortMode đã bị Obsolete)
+// ✅ Unity 6 Standard: Get multiple objects (No obsolete SortMode parameter needed)
 var managers = FindObjectsByType<GameManager>(FindObjectsInactive.Exclude);
 ```
 
@@ -108,18 +108,18 @@ In reality, per Unity's official documentation: **There is NO `Resources.FindObj
 If you need to track a list of all objects in the Scene while achieving **absolute zero GC Alloc**, use the **Static Registration Pattern**:
 
 ```csharp
-// ✅ Giải pháp Zero GC Alloc: Tự đăng ký danh sách khi kích hoạt
+// ✅ Zero GC Alloc solution: Self-register in a static list on enable
 public class Enemy : MonoBehaviour 
 {
-    // Danh sách tĩnh dùng chung, tái sử dụng bộ nhớ không cấp phát mới
+    // Shared static list reusing memory with no new allocations
     public static readonly List<Enemy> ActiveEnemies = new();
 
     void OnEnable()  => ActiveEnemies.Add(this);
     void OnDisable() => ActiveEnemies.Remove(this);
 }
 
-// Bất kỳ đâu trong game cần truy cập:
-// Dùng trực tiếp Enemy.ActiveEnemies — Nhanh gấp hàng chục lần Find và hoàn toàn 0 GC Alloc!
+// Anywhere in the game that needs access:
+// Use Enemy.ActiveEnemies directly — dozens of times faster than Find with 0 GC Alloc!
 ```
 
 ### **Method 4: Wrapping Editor-Only Code with `#if UNITY_EDITOR`**
@@ -129,8 +129,8 @@ To prevent these methods from leaking into your final game build (Player Build) 
 
 ```csharp
 #if UNITY_EDITOR 
-// Đoạn code này chỉ chạy khi bạn làm việc trên Unity Editor
-// Sẽ bị xóa hoàn toàn khi Build ra file .exe, .apk
+// This code only runs inside the Unity Editor
+// It is completely stripped when building to .exe or .apk
 public static List<T> GetAllResources<T>() where T : Object
 {
     var reOfType = Resources.FindObjectsOfTypeAll<T>();
@@ -153,32 +153,32 @@ To see how to apply these techniques in practice, let's examine the two most com
   2. Expose a static `SharedUIManager` property to cache the reference, turning the lookup into an instant $O(1)$ access with **0 bytes of garbage**.
 
 ```csharp
-// ❌ TRƯỚC KHI TỐI ƯU: Quét toàn bộ bộ nhớ và tạo rác mỗi lần gọi hàm
+// ❌ BEFORE: Scans all of memory and creates garbage on every call
 public static string GetKeyOutput(string tableID, string tableKey) 
 {
     UIManager tempUIM = (UIManager)Resources.FindObjectsOfTypeAll(typeof(UIManager))[0];
     return tempUIM.GetLocalizedText(tableID, tableKey);
 }
 
-// ✅ SAU KHI TỐI ƯU: Tận dụng Cache tĩnh (Zero GC Alloc)
+// ✅ AFTER: Uses static cache (Zero GC Alloc)
 public class LocalizationManager : MonoBehaviour 
 {
     public static LocalizationManager instance;
     public UIManager UIManagerAsset;
 
-    // Cache truy cập nhanh cho toàn bộ game
+    // Fast-access cache for the entire game
     public static UIManager SharedUIManager => instance != null ? instance.UIManagerAsset : null;
 
     void Awake() 
     {
         instance = this;
-        // Dùng API Unity 6 tìm 1 lần duy nhất, không cấp phát mảng
+        // Use Unity 6 API to search once without array allocation
         if (UIManagerAsset == null) 
             UIManagerAsset = FindAnyObjectByType<UIManager>(); 
     }
 }
 
-// Bất kỳ đâu cần lấy text chỉ việc gọi qua Cache:
+// Anywhere text is needed, simply read from the Cache:
 public static string GetKeyOutput(string tableID, string tableKey) 
 {
     UIManager tempUIM = LocalizationManager.SharedUIManager;
@@ -193,16 +193,16 @@ public static string GetKeyOutput(string tableID, string tableKey)
 * **Solution**: Wrap the entire asset-lookup block in the `#if UNITY_EDITOR` preprocessor directive. When you build the game into an executable package (`.exe`, `.apk`), Unity automatically strips those lines completely from the runtime build.
 
 ```csharp
-// ❌ TRƯỚC KHI TỐI ƯU: Mã tìm kiếm tài nguyên Editor nằm lộ thiên trong Runtime
+// ❌ BEFORE: Editor asset-search code exposed in Runtime
 public static List<T> GetAllResources<T>() where T : Object
 {
     var reOfType = Resources.FindObjectsOfTypeAll<T>();
     return reOfType != null ? reOfType.ToList() : null;
 }
 
-// ✅ SAU KHI TỐI ƯU: Bọc chỉ thị tiền biên dịch #if UNITY_EDITOR
+// ✅ AFTER: Wrapped in the #if UNITY_EDITOR preprocessor directive
 #if UNITY_EDITOR
-// Khối mã này chỉ tồn tại trên Unity Editor, bị loại bỏ 100% khi Build game
+// This block exists only in the Unity Editor and is 100% stripped from final builds
 public static List<T> GetAllResources<T>() where T : Object
 {
     var reOfType = Resources.FindObjectsOfTypeAll<T>();

@@ -6,6 +6,8 @@ tags: [unity, textmeshpro, tmp, localization, font, sdf, addressables, cjk, viet
 description: Hướng dẫn kỹ thuật chuyên sâu về kiến trúc phông chữ đa ngôn ngữ (15 ngôn ngữ), quy trình tạo TextMeshPro SDF Font Asset, xử lý Han Unification, tích hợp Unity Localization và tối ưu bộ nhớ VRAM với Addressables.
 lang: vi
 translation_id: gilongworld-tmp-multilingual-font-architecture
+math: true
+mermaid: true
 ---
 
 ## **1. Tổng Quan Dự Án Và Thách Thức Nội Địa Hóa Thời Gian Thực**
@@ -360,7 +362,7 @@ Dự án GilongWorld, với quy mô 15 ngôn ngữ, đòi hỏi một thiết k�
 
 ---
 
-#### **Nguồn trích dẫn**
+## **Nguồn trích dẫn**
 
 [^1]: Fix: Unity TextMeshPro Font Asset Missing or Fallback | Bugnet Blog, [https://bugnet.io/blog/fix-unity-textmeshpro-font-asset-missing](https://bugnet.io/blog/fix-unity-textmeshpro-font-asset-missing)
 [^2]: Fix: Unity UI TextMeshPro Falling Back to Default Font | Bugnet Blog, [https://bugnet.io/blog/fix-unity-ui-text-mesh-pro-falling-back-default-font](https://bugnet.io/blog/fix-unity-ui-text-mesh-pro-falling-back-default-font)

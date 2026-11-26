@@ -233,7 +233,7 @@ Bản thảo gốc của Long Gil Studio đã đề cập ngắn gọn đến c�
 
 Dựa trên quá trình đánh giá kỹ thuật toàn diện, phần văn bản dưới đây là bài viết DevLog được đề xuất, được chỉnh sửa hoàn toàn và thể hiện sự chuyên nghiệp kỹ thuật cấp cao. Nó từ bỏ phương pháp MPB bị lỗi và hướng dẫn người đọc đến các tiêu chuẩn kiến trúc thực sự của Unity 6: RSUV và GPU Resident Drawer.
 
-### ---
+---
 
 **Unity 6: Tối ưu Hàng ngàn Object Dùng chung Material – Từ bỏ MPB để tiến tới Kiến trúc Hiện đại**
 
@@ -439,9 +439,9 @@ void BuildSurfaceData(FragInputs fragInputs, inout GlobalSurfaceDescription surf
 
 If your game requires rendering hundreds of thousands of dynamic units, standard GameObjects will eventually bottleneck the CPU's main thread regardless of graphics optimizations. For massive scale, transition to Unity DOTS. Using the URPMaterialPropertyOverride component allows for strict Data-Oriented memory layouts. This interfaces directly with the low-level BatchRendererGroup API, achieving unmatched, pure AAA-level rendering performance.
 
-## ---
+---
 
-**Phần X: Các Khuyến nghị Chiến lược cho Nhóm Phát triển**
+## **Phần X: Các Khuyến nghị Chiến lược cho Nhóm Phát triển**
 
 Việc phân tích các mô hình render hiện đại cho thấy một sự khác biệt quan trọng giữa kiến thức tối ưu hóa cũ (legacy) và kiến trúc engine đương đại. Điểm cốt lõi dành cho các kỹ sư đồ họa là: Việc sửa đổi các bộ đệm dữ liệu (data buffers) trên từng đối tượng vốn có bản chất thù địch với xử lý song song và các vòng lặp render do GPU điều khiển. Không thể sử dụng tư duy tối ưu Unity 5.x hoặc Unity 2019 cho Unity 6\.
 
@@ -451,7 +451,7 @@ Việc phân tích các mô hình render hiện đại cho thấy một sự kh�
 2. **Áp dụng Chiến lược Mã hóa Bitwise (Bitwise Encoding Strategies):** Việc áp dụng Renderer Shader User Value (RSUV) đòi hỏi sự thay đổi trong phương pháp luận lập trình. Các nghệ sĩ kỹ thuật (Technical Artists) và lập trình viên gameplay phải hợp tác để định nghĩa các sơ đồ đóng gói bitwise nghiêm ngặt cho giới hạn 24-bit của RSUV. Cần đảm bảo rằng các trạng thái dữ liệu đa dạng (màu sắc, sát thương, ID đội nhóm \- team ID) được tuần tự hóa (serialized) hiệu quả trước khi chạm đến renderer. Ví dụ: Có thể phân bổ 4 bit cho "ID phe phái" (cho phép 16 phe), 8 bit cho "Trạng thái Sát thương" (cho phép 256 mức độ), và 12 bit cho "Custom Tint" (màu tùy chỉnh) \- tất cả được giải mã đồng thời thông qua mặt nạ bit (bitmasks) trong shader.  
 3. **Đánh giá Ngưỡng Chuyển đổi ECS (Evaluate Thresholds for ECS Transition):** Mặc dù RSUV giải quyết được điểm nghẽn về biến thể material cho GameObjects, các ranh giới giới hạn CPU liên quan đến tính toán vật lý, tính toán ma trận (transform calculations) và culling của GameObject vẫn tồn tại. Các dự án dự đoán số lượng thực thể hoạt động vượt quá 10.000 tác nhân động (dynamic agents) nên mạnh dạn và tích cực thiết kế các nguyên mẫu (prototypes) triển khai DOTS (Entity Component System). Việc sử dụng thành phần URPMaterialPropertyOverride[^34] để giao tiếp nội tại với API BatchRendererGroup là con đường duy nhất để giải phóng hoàn toàn tiềm năng sức mạnh của phần cứng máy tính và máy chơi game console thế hệ mới.
 
-#### **Nguồn trích dẫn**
+## **Nguồn trích dẫn**
 
 [^1]: Enable the GPU Resident Drawer in URP \- Unity \- Manual, truy cập vào tháng 4 19, 2026, [https://docs.unity3d.com/Manual//urp/gpu-resident-drawer.html](https://docs.unity3d.com/Manual//urp/gpu-resident-drawer.html)  
 [^2]: Make a GameObject compatible with the GPU Resident Drawer in URP \- Unity \- Manual, truy cập vào tháng 4 19, 2026, [https://docs.unity3d.com/6000.3/Documentation/Manual/urp/make-object-compatible-gpu-rendering.html](https://docs.unity3d.com/6000.3/Documentation/Manual/urp/make-object-compatible-gpu-rendering.html)  

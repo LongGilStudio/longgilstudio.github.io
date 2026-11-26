@@ -1,8 +1,28 @@
-# Chirpy Markdown cheatsheet (dùng cho blog Long Gil Studio — Song Ngữ EN/VI)
+# Chirpy Markdown cheatsheet (dùng cho blog Long Gil Studio — 15 Ngôn Ngữ)
 
 Nguồn chính thức: <https://chirpy.cotes.page/posts/write-a-new-post/>
 
-## Front matter mở rộng (Song ngữ bắt buộc)
+## Bảng quy chuẩn 15 ngôn ngữ mục tiêu
+
+| # | Ngôn ngữ | Mã `lang` | Hậu tố tên file | Nhãn hình ảnh | Tiêu đề mục Tài liệu Tham khảo | Tiêu đề mục Đọc thêm |
+| :-: | :-- | :-- | :-- | :-- | :-- | :-- |
+| 1 | Vietnamese (Gốc) | `vi` | `YYYY-MM-DD-<vi-slug>.md` | `_Hình N: ..._` | `## **Tài liệu Tham khảo**` | `### Tài liệu đọc thêm` |
+| 2 | English | `en` | `YYYY-MM-DD-<en-slug>.md` | `_Figure N: ..._` | `## **References**` | `### Further Reading` |
+| 3 | French | `fr` | `YYYY-MM-DD-<en-slug>-fr.md` | `_Figure N : ..._` | `## **Références**` | `### Lectures complémentaires` |
+| 4 | Italian | `it` | `YYYY-MM-DD-<en-slug>-it.md` | `_Figura N: ..._` | `## **Riferimenti**` | `### Letture consigliate` |
+| 5 | German | `de` | `YYYY-MM-DD-<en-slug>-de.md` | `_Abbildung N: ..._` | `## **Referenzen**` | `### Weiterführende Literatur` |
+| 6 | Spanish - Spain | `es` | `YYYY-MM-DD-<en-slug>-es.md` | `_Figura N: ..._` | `## **Referencias**` | `### Lecturas recomendadas` |
+| 7 | Polish | `pl` | `YYYY-MM-DD-<en-slug>-pl.md` | `_Rysunek N: ..._` | `## **Bibliografia**` | `### Dalsza lektura` |
+| 8 | Portuguese - Brazil | `pt-BR` | `YYYY-MM-DD-<en-slug>-pt-br.md` | `_Figura N: ..._` | `## **Referências**` | `### Leitura adicional` |
+| 9 | Portuguese - Portugal | `pt-PT` | `YYYY-MM-DD-<en-slug>-pt-pt.md` | `_Figura N: ..._` | `## **Referências**` | `### Leituras adicionais` |
+| 10 | Korean | `ko` | `YYYY-MM-DD-<en-slug>-ko.md` | `_그림 N: ..._` | `## **참고문헌**` | `### 추가 읽을거리` |
+| 11 | Russian | `ru` | `YYYY-MM-DD-<en-slug>-ru.md` | `_Рис. N: ..._` | `## **Список литературы**` | `### Дополнительная литература` |
+| 12 | Japanese | `ja` | `YYYY-MM-DD-<en-slug>-ja.md` | `_図N：..._` | `## **参考文献**` | `### 関連資料` |
+| 13 | Turkish | `tr` | `YYYY-MM-DD-<en-slug>-tr.md` | `_Şekil N: ..._` | `## **Kaynakça**` | `### İleri Okuma` |
+| 14 | Simplified Chinese | `zh-CN` | `YYYY-MM-DD-<en-slug>-zh-cn.md` | `_图 N：..._` | `## **参考文献**` | `### 延伸阅读` |
+| 15 | Traditional Chinese | `zh-TW` | `YYYY-MM-DD-<en-slug>-zh-tw.md` | `_圖 N：..._` | `## **參考文獻**` | `### 延伸閱讀` |
+
+## Front matter mở rộng (Đa ngôn ngữ bắt buộc)
 
 ```yaml
 ---
@@ -11,8 +31,8 @@ date: 2026-10-22 03:00:00 +0700
 categories: [Game Development, Unity]   # tối đa 2 cấp, viết bằng Tiếng Anh chuẩn
 tags: [unity, urp]                       # chữ thường, kebab-case, không dấu
 description: ...
-lang: vi                                 # bắt buộc: "vi" hoặc "en"
-translation_id: unity6-render-graph      # bắt buộc: mã chung nối cặp bài VI <-> EN
+lang: vi                                 # bắt buộc: thuộc 15 mã BCP-47 ở bảng trên
+translation_id: unity6-render-graph      # bắt buộc: mã chung nối 15 bài cùng chủ đề
 math: true            # bật MathJax ($...$ inline, $$...$$ khối)
 mermaid: true         # bật Mermaid
 pin: true             # ghim lên đầu trang chủ
@@ -79,7 +99,7 @@ Câu có trích dẫn[^2].
 ```
 
 - kramdown gom footnote xuống cuối trang và **đánh lại số theo thứ tự xuất hiện**, nên số hiển thị có thể khác nhãn `[^n]`.
-- Định nghĩa không được tham chiếu sẽ **không hiển thị** (đưa vào mục `### Tài liệu đọc thêm` / `### Further Reading`).
+- Định nghĩa không được tham chiếu sẽ **không hiển thị** (đưa vào mục Tài liệu đọc thêm tương ứng).
 - Nhãn trùng nhau sẽ bị bỏ qua, chỉ định nghĩa đầu tiên được dùng.
 
 ## Bảng

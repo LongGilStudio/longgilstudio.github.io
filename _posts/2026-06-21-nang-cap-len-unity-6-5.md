@@ -168,7 +168,7 @@ Mô đun quản lý cây dữ liệu (ModelImporter) loại bỏ tận gốc cá
 Nâng cấp cơ sở hạ tầng từ Unity 6.4 lên 6.5 (6000.5) đòi hỏi một cuộc đại tu kiến trúc tỉ mỉ, kiên quyết và mang tính thanh lọc. Sự chuyển đổi cốt lõi từ InstanceID (số nguyên 32-bit) sang EntityId (64-bit có tem bảo mật vòng đời) là sự thay đổi chấn động cấu trúc bộ nhớ nhất, yêu cầu làm sạch toàn bộ các đoạn mã ép kiểu ngầm định và thiết kế lại khóa truy cập từ điển.  
 Việc rà soát và tiêu diệt các truy cập di sản như Component.rigidbody bằng cấu trúc truy vấn bảo thủ `GetComponent<T>()`, hay xóa bỏ các vòng lặp ECS cũ nát Entities.ForEach không chỉ giúp dự án biên dịch thành công mà còn cứu vãn tài nguyên tính toán của CPU. Quan trọng hơn cả, việc phân loại và dán siêu dữ liệu dọn dẹp các biến tĩnh qua bộ Editor Lifecycle APIs mới sẽ quyết định sống còn của bộ nhớ, bảo toàn tính tương thích với hệ thống CoreCLR vắng bóng cơ chế tải lại miền trong tương lai. Cuối cùng, việc chuyển đổi luồng đồ họa sang chuẩn Universal Render Pipeline cùng với chức năng làm mờ, phối màu không gian trực tiếp tại ô GPU (On-Tile Post Processing) trên thiết bị kính thực tế ảo / di động sẽ giúp giảm nhiệt phần cứng và tăng độ mượt mà lên ngưỡng chưa từng có.
 
-#### **Nguồn trích dẫn**
+## **Nguồn trích dẫn**
 
 [^1]: Unity 6.5 is now available : r/Unity3D - Reddit, [https://www.reddit.com/r/Unity3D/comments/1u7gor6/unity_65_is_now_available/](https://www.reddit.com/r/Unity3D/comments/1u7gor6/unity_65_is_now_available/)
 [^2]: GetInstanceId() deprecation - Unity Engine - Unity Discussions, [https://discussions.unity.com/t/getinstanceid-deprecation/1705258](https://discussions.unity.com/t/getinstanceid-deprecation/1705258)

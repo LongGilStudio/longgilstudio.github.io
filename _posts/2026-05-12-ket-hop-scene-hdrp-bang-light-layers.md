@@ -156,7 +156,7 @@ Từ quá trình bóc tách từng phân hệ lõi của Unity 6 HDRP, giải ph
 
 Hệ sinh thái đồ họa mô phỏng vật lý của Unity 6 HDRP là một bộ máy phức tạp và khắt khe, nơi mọi sự thay đổi đối với ánh sáng đều kéo theo những hệ lụy vật lý về phản chiếu, che khuất và khúc xạ không gian. Việc sử dụng Light Layers để phân tách kênh ánh sáng là một khởi đầu hoàn hảo thể hiện sự am hiểu hệ thống, nhưng để biến lý thuyết đó thành một không gian nghệ thuật toàn vẹn, nó cần phải được hỗ trợ bởi một mạng lưới các cấu hình vi mô. Bằng cách áp dụng triệt để hệ thống Custom Shadow Layers kết hợp Mixed Cached Shadows, tận dụng uy lực kiểm soát không gian của Local Volume Framework, và thiết lập kỷ luật phân luồng thông tin ánh sáng gián tiếp với Probe Adjustment Volume, kiến trúc sư đồ họa hoàn toàn có thể cưỡng ép cỗ máy kết xuất khổng lồ này vận hành song song hai thực tại đa chiều bên trong một vùng không gian duy nhất mà không hề để lộ bất kỳ sự thỏa hiệp nào về chất lượng thị giác. Mọi ranh giới về sự rò rỉ hình học và ô nhiễm quang phổ đều có thể bị phong tỏa khi người thiết kế nắm vững cấu trúc lõi của các lớp bộ đệm (buffers) và dòng chảy của photon trên bộ xử lý GPU.
 
-#### **Nguồn trích dẫn**
+## **Nguồn trích dẫn**
 
 
 [^1]: Use light rendering layers | High Definition RP | 16.0.6 \- Unity \- Manual, truy cập vào tháng 5 11, 2026, [https://docs.unity3d.com/Packages/com.unity.render-pipelines.high-definition@16.0/manual/Rendering-Layers.html](https://docs.unity3d.com/Packages/com.unity.render-pipelines.high-definition@16.0/manual/Rendering-Layers.html)  

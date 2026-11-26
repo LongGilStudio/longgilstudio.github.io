@@ -1,6 +1,6 @@
-# Long Gil Studio Devlog — Bilingual Engineering Blog & GilongWorld Hub
+# Long Gil Studio Devlog — 15-Language Engineering Blog & GilongWorld Hub
 
-> Official bilingual (English & Vietnamese) engineering knowledge base of **Long Gil Studio**, founded by **Huỳnh Long Gil**. This site documents production-tested Unity 6 architecture, URP/HDRP rendering optimization, .NET/IL2CPP memory engineering, AI agent workflows (`CLAUDE.md`), and technical devlogs from building **GilongWorld**.
+> Official multilingual (15 languages) engineering knowledge base of **Long Gil Studio**, founded by **Huỳnh Long Gil**. This site documents production-tested Unity 6 architecture, URP/HDRP rendering optimization, .NET/IL2CPP memory engineering, AI agent workflows (`CLAUDE.md`), and technical devlogs from building **GilongWorld**.
 
 ---
 
@@ -8,7 +8,10 @@
 
 - **Studio:** Long Gil Studio (`https://longgilstudio.com`)
 - **Founder / Lead Engineer:** Huỳnh Long Gil (`https://longgilstudio.com/cv.html`)
-- **Blog / Devlog URL:** `https://devlog.longgilstudio.com` (Languages: `en` default, `vi`)
+- **Blog / Devlog URL:** `https://devlog.longgilstudio.com`
+- **Supported Languages (15 Target Languages):**
+  - `en` (English — Default), `vi` (Vietnamese — Source of Truth), `fr` (French), `it` (Italian), `de` (German), `es` (Spanish - Spain), `pl` (Polish), `pt-BR` (Portuguese - Brazil), `pt-PT` (Portuguese - Portugal), `ko` (Korean), `ru` (Russian), `ja` (Japanese), `tr` (Turkish), `zh-CN` (Simplified Chinese), `zh-TW` (Traditional Chinese)
+  - **Multilingual URL Pattern:** Every English post at `/posts/<english-slug>/` has localized editions at `/posts/<english-slug>-<lang_lower>/` (e.g., `-fr/`, `-it/`, `-de/`, `-es/`, `-pl/`, `-pt-br/`, `-pt-pt/`, `-ko/`, `-ru/`, `-ja/`, `-tr/`, `-zh-cn/`, `-zh-tw/`) plus the Vietnamese source post. All 15 versions are cross-linked via `<link rel="alternate" hreflang="...">` and Schema.org `translationOfWork` / `workTranslation`.
 - **Flagship Project:** **GilongWorld**
   - **Genre:** Triple-I / AAA Indie Sci-Fi Action RPG (Open World, Survival, Alchemy & Exotic Farming, Mythical Creature Taming, Fortress Base Building)
   - **Engine & Target Platform:** Unity 6 (DirectX 12, PC / Steam)
@@ -20,7 +23,7 @@
 
 ---
 
-## English Engineering Articles (Default)
+## English Engineering Articles (Default — Available in All 15 Languages)
 
 1. [Strategic Architecture for Deploying CLAUDE.md in Unity 6: Optimizing Prompt Caching, Agent Skills, and the Roadmap to Unity 6.7 LTS](https://devlog.longgilstudio.com/posts/deploying-claude-md-architecture-for-unity-6-prompt-caching-and-agent-skills/) — Hierarchical `CLAUDE.md` design, 90% Anthropic Prompt Caching savings, `Unity-Technologies/skills`, `Awaitable`, RenderGraph, and Unity 6.7 LTS CoreCLR roadmap.
 2. [Unity 6 Analysis Tools Ecosystem and Optimization Strategy for GilongWorld](https://devlog.longgilstudio.com/posts/unity-6-analysis-tools-ecosystem-and-optimization-strategy-for-gilongworld/) — Deep dive into all 13 `Window > Analysis` tools plus hidden diagnostics (`Render Graph Viewer`, `Performance Markers`, `Project Auditor`) under GilongWorld's 16 GB RAM / DX12 budget.
@@ -38,9 +41,9 @@
 
 ---
 
-## Bài Viết Kỹ Thuật Tiếng Việt (Vietnamese Edition)
+## Bài Viết Kỹ Thuật Tiếng Việt (Vietnamese Source Edition)
 
-Trang web này cũng là blog và devlog chính thức bằng Tiếng Việt của **Long Gil Studio**, chia sẻ kiến thức chuyên sâu về phát triển **AAA Indie Game (Triple-I)** tại Việt Nam.
+Trang web này cũng là blog và devlog chính thức bằng Tiếng Việt của **Long Gil Studio**, chia sẻ kiến thức chuyên sâu về phát triển **AAA Indie Game (Triple-I)** tại Việt Nam. Mọi bài viết mới từ Tiếng Việt đều được tự động biên dịch và kiểm định đối chiếu 1-1 sang đủ 15 ngôn ngữ mục tiêu.
 
 1. [Kế Hoạch Chiến Lược Triển Khai Kiến Trúc CLAUDE.md Cho Unity 6](https://devlog.longgilstudio.com/posts/trien-khai-claude-md-cho-unity-6/) — Thiết kế `CLAUDE.md` phân tầng, tối ưu 90% chi phí Prompt Caching, `Unity-Technologies/skills` và lộ trình lên Unity 6.7 LTS.
 2. [Hệ Sinh Thái Công Cụ Phân Tích Của Unity 6 Và Chiến Lược Tối Ưu Cho GilongWorld](https://devlog.longgilstudio.com/posts/tool-analysis-trong-Unity/) — Phân tích 13 công cụ trong `Window > Analysis` và các công cụ ẩn cho bài toán 16 GB RAM / DX12 của GilongWorld.
@@ -55,3 +58,23 @@ Trang web này cũng là blog và devlog chính thức bằng Tiếng Việt c�
 11. [Kiến Trúc Tích Hợp Đa Không Gian Khung Cảnh Trong Unity 6 HDRP Bằng Light Layers](https://devlog.longgilstudio.com/posts/ket-hop-scene-hdrp-bang-light-layers/) — Gộp nhiều scene HDRP độc lập bằng Light Layers, bóng đổ, volumetrics và Adaptive Probe Volumes.
 12. [Bắt đầu Với Hệ Thống Awaitable Trong Unity: Đối Chiếu Cùng Coroutines](https://devlog.longgilstudio.com/posts/getting-started-with-awaitables/) — Phân tích cơ chế pool của `Awaitable`, đối chiếu với Coroutines và UniTask.
 13. [Kiến trúc Render trong Unity 6: Từ bỏ MPB để tối ưu Material chuyên sâu](https://devlog.longgilstudio.com/posts/toi-uu-material-trong-unity-6/) — Tại sao `MaterialPropertyBlock` xung đột với GPU Resident Drawer và cách chuyển sang RSUV hoặc DOTS.
+
+---
+
+## Multilingual Editions URL Suffix Map (13 Additional Languages)
+
+For any English article URL `https://devlog.longgilstudio.com/posts/<english-slug>/`, append the language suffix before the trailing slash:
+
+- **French (`fr`):** `/posts/<english-slug>-fr/`
+- **Italian (`it`):** `/posts/<english-slug>-it/`
+- **German (`de`):** `/posts/<english-slug>-de/`
+- **Spanish - Spain (`es`):** `/posts/<english-slug>-es/`
+- **Polish (`pl`):** `/posts/<english-slug>-pl/`
+- **Portuguese - Brazil (`pt-BR`):** `/posts/<english-slug>-pt-br/`
+- **Portuguese - Portugal (`pt-PT`):** `/posts/<english-slug>-pt-pt/`
+- **Korean (`ko`):** `/posts/<english-slug>-ko/`
+- **Russian (`ru`):** `/posts/<english-slug>-ru/`
+- **Japanese (`ja`):** `/posts/<english-slug>-ja/`
+- **Turkish (`tr`):** `/posts/<english-slug>-tr/`
+- **Simplified Chinese (`zh-CN`):** `/posts/<english-slug>-zh-cn/`
+- **Traditional Chinese (`zh-TW`):** `/posts/<english-slug>-zh-tw/`

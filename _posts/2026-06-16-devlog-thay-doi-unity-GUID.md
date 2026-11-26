@@ -133,7 +133,7 @@ Phương pháp can thiệp trực tiếp bằng việc khởi tạo cấu trúc 
 Dựa trên quá trình phân tích sự cố này, các nhà thiết kế kiến trúc phần mềm trò chơi quy mô lớn cần luôn duy trì một quy trình làm việc chuẩn hóa khi thực hiện các hoạt động nhân bản và phân nhánh phức tạp. Việc thiết lập hệ thống sao lưu dự phòng (version control backup) trước các lệnh thao tác diện rộng trên đĩa cứng là quy tắc tối thượng nhằm tránh tình trạng mất dữ liệu không thể đảo ngược[^7]. Đồng thời, các nhà phát triển nên cảnh giác với việc vô tình thay đổi FileID bên trong các tệp mã nguồn (.cs) do quá trình đổi tên không gian làm việc (namespace renaming) vì nó sẽ trực tiếp phá hỏng liên kết cấp thấp giữa cấu hình hiển thị và tập lệnh thực thi[^4].  
 Thành công của Long Gil Studio trong việc tìm ra và áp dụng phương pháp tái tạo GUID không chỉ giải phóng nguồn lực của dự án GilongWorld khỏi hàng ngàn giờ thao tác cấu hình thủ công mà còn thiết lập một nền tảng kỹ thuật vững chắc để hệ thống có thể tùy biến linh hoạt trong tương lai, đáp ứng nhanh chóng các yêu cầu rẽ nhánh thiết kế mà không phải đánh đổi bằng sự ổn định của cấu trúc cốt lõi.
 
-#### **Nguồn trích dẫn**
+## **Nguồn trích dẫn**
 
 [^1]: GUID Regenerator (com.jeffjadulco.guidregenerator) | OpenUPM Unity Package, [https://openupm.com/packages/com.jeffjadulco.guidregenerator/](https://openupm.com/packages/com.jeffjadulco.guidregenerator/)  
 [^2]: Understanding Unity's serialization language, YAML, [https://unity.com/blog/engine-platform/understanding-unitys-serialization-language-yaml](https://unity.com/blog/engine-platform/understanding-unitys-serialization-language-yaml)  

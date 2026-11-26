@@ -143,15 +143,15 @@ In practical C# implementation, iterating over an array of `MeshRenderer` compon
 MeshRenderer allMeshRenderers = FindObjectsByType<MeshRenderer>(FindObjectsSortMode.InstanceID);  
 foreach (MeshRenderer meshRenderer in allMeshRenderers)  
 {  
-    // Tính toán một màu sắc ngẫu nhiên (sử dụng hệ màu HSV để màu tươi hơn)  
+    // Compute a random vibrant color using HSV color space  
     Color32 targetColor = Color.HSVToRGB(UnityEngine.Random.Range(0f, 1f), 1f, 1f);  
 
-    // Mã hóa RGB vào số nguyên 24-bit (Blue, Green, Red)  
+    // Encode RGB into a 24-bit integer (Blue, Green, Red)  
     uint encodedColor = ((uint)targetColor.b << 16) |   
                         ((uint)targetColor.g << 8) |   
                         ((uint)targetColor.r << 0);  
 
-    // Áp dụng giá trị trực tiếp cho renderer thông qua API mới của Unity 6.3
+    // Apply the value directly to the renderer via the new Unity 6.3 API
     meshRenderer.SetShaderUserValue(encodedColor);  
 }
 ```
@@ -171,10 +171,10 @@ In High-Level Shader Language (HLSL) or via a Custom Function node in Shader Gra
 ```hlsl
 uint c = unity_RendererUserValue;  
 float4 instanceColor = float4(  
-    (float)((c >> 0) & 255) * (1.0 / 255.0),  // Kênh Đỏ (Red)  
-    (float)((c >> 8) & 255) * (1.0 / 255.0),  // Kênh Xanh lá (Green)  
-    (float)((c >> 16) & 255) * (1.0 / 255.0), // Kênh Xanh dương (Blue)  
-    1.0 // Alpha cố định  
+    (float)((c >> 0) & 255) * (1.0 / 255.0),  // Red channel  
+    (float)((c >> 8) & 255) * (1.0 / 255.0),  // Green channel  
+    (float)((c >> 16) & 255) * (1.0 / 255.0), // Blue channel  
+    1.0 // Fixed Alpha  
 );
 ```
 
@@ -197,15 +197,15 @@ When an entity is processed in DOTS, a shader configured for DOTS Instancing (by
 The shader uses this offset to fetch the specific property data for the instance it is currently rendering.[^34] What makes DOTS Instancing exceptional is that if multiple entities share the same property value, DOTS Instancing allows them to read that value from the exact same memory location (the same offset), saving GPU cycles and minimizing memory duplication.[^34] Because properties are fetched by offset rather than packed into rigid traditional constant buffers, draw call sizes are no longer tightly constrained, unlocking massive instance counts.
 
 ```csharp
-// Ví dụ về việc gán giá trị RSUV thông qua hệ thống DOTS / Burst Compile 
+// Example of assigning RSUV values via the DOTS / Burst-compiled system 
 
 public partial struct MaterialMeshInfoSystem : ISystem   
 {  
     public void OnUpdate(ref SystemState state)   
     {  
         var entityManager = state.EntityManager;  
-        // Xử lý song song bằng cách gán giá trị trực tiếp vào Native Array  
-        // Mang lại tốc độ thực thi mà MonoBehaviour không bao giờ có thể đạt tới.  
+        // Process in parallel by writing values directly into a NativeArray  
+        // Delivering execution speed that MonoBehaviour can never match.  
     }  
 }
 ```
@@ -272,12 +272,12 @@ public class RSUVColorOverride : MonoBehaviour
     {  
         MeshRenderer rnd = GetComponent<MeshRenderer>();  
 
-        // Mã hóa 3 kênh Blue, Green, và Red vào một số nguyên 24-bit  
+        // Encode Blue, Green, and Red channels into a 24-bit integer  
         uint encodedColor = ((uint)targetColor.b << 16) |   
                             ((uint)targetColor.g << 8) |   
                             ((uint)targetColor.r);  
 
-        // Áp dụng giá trị (An toàn tuyệt đối cho kiến trúc SRP và GRD!)  
+        // Apply value (100% safe for SRP Batcher and GRD architecture!)  
         rnd.SetShaderUserValue(encodedColor);  
     }  
 }
@@ -311,7 +311,7 @@ void BuildSurfaceData(FragInputs fragInputs, inout GlobalSurfaceDescription surf
     surfaceData.specularOcclusion = 1.0;
     surfaceData.thickness = 0.0;
 
-    // Giải mã RSUV
+    // Decode RSUV
     uint rsuvValue = unity_RendererUserValue;
     float3 rsuvColor = float3(1.0, 1.0, 1.0);
     if (rsuvValue != 0) {
@@ -320,7 +320,7 @@ void BuildSurfaceData(FragInputs fragInputs, inout GlobalSurfaceDescription surf
         rsuvColor.b = (float)((rsuvValue >> 16) & 255) / 255.0;
     }
 
-    // Áp dụng màu rsuvColor
+    // Apply rsuvColor
     surfaceData.baseColor =             surfaceDescription.BaseColor * rsuvColor;
     surfaceData.perceptualSmoothness =  surfaceDescription.Smoothness;
     surfaceData.ambientOcclusion =      surfaceDescription.Occlusion;
@@ -490,4 +490,4 @@ To reach peak performance in Unity 6, engineering teams should strictly enforce 
 [^35]: Material overrides using the Material Override Asset | Entities Graphics - Unity - Manual, accessed April 19, 2026, [https://docs.unity3d.com/Packages/com.unity.entities.graphics@6.5/manual/material-overrides-asset.html](https://docs.unity3d.com/Packages/com.unity.entities.graphics@6.5/manual/material-overrides-asset.html)  
 [^36]: One Material multiple colors possible? : r/Unity3D - Reddit, accessed April 19, 2026, [https://www.reddit.com/r/Unity3D/comments/9oi8kz/one\_material\_multiple\_colors\_possible/](https://www.reddit.com/r/Unity3D/comments/9oi8kz/one_material_multiple_colors_possible/)  
 [^37]: Single-pass instanced rendering and custom shaders - Unity - Manual, accessed April 19, 2026, [https://docs.unity3d.com/2021.3/Documentation/Manual/SinglePassInstancing.html](https://docs.unity3d.com/2021.3/Documentation/Manual/SinglePassInstancing.html)  
-[^38]: Use Graphics.DrawMeshInstanced or similar but vary the color on a per object basis?, accessed April 19, 2026, [https://www.reddit.com/r/Unity3D/comments/1bqnyb5/use\_graphicsdrawmeshinstanced\_or\_similar\_but\_vary/](https://www.reddit.com/r/Unity3D/comments/1bqnyb5/use_graphicsdrawmeshinstanced_or_similar\_but\_vary/)
+[^38]: Use Graphics.DrawMeshInstanced or similar but vary the color on a per object basis?, accessed April 19, 2026, [https://www.reddit.com/r/Unity3D/comments/1bqnyb5/use\_graphicsdrawmeshinstanced\_or\_similar\_but\_vary/](https://www.reddit.com/r/Unity3D/comments/1bqnyb5/use_graphicsdrawmeshinstanced_or_similar_but_vary/)

@@ -150,9 +150,9 @@ pwa:
       # - "/example"  # URLs match `<SITE_URL>/example/*` will not be cached by the PWA
 
 future: true
-paginate: 30
+paginate: 500
 default_lang: en
-languages: [en, vi]
+languages: [en, vi, fr, it, de, es, pl, pt-BR, pt-PT, ko, ru, ja, tr, zh-CN, zh-TW]
 
 gilongworld:
   steam_app_id: "4615990"

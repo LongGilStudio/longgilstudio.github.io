@@ -302,7 +302,7 @@ In a production project built on the RPG Builder framework (Project GLW), a majo
 if(requirement.CheckYear) results.Add(DateTime.Now.Year == requirement.Year);
 if(requirement.CheckMonth) results.Add(DateTime.Now.Month == requirement.Month);
 if(requirement.CheckDay) results.Add(DateTime.Now.Day == requirement.Day);
-// ... Lặp lại cho Hour, Minute, Second
+// ... Repeat for Hour, Minute, Second
 ```
 
 **Issues identified in the legacy codebase:**
@@ -322,7 +322,7 @@ private static DateTime GetCurrentSystemTime()
     {
         int currentFrame = Time.frameCount;
         
-        // Chỉ lấy giờ thật từ OS 1 lần duy nhất mỗi khung hình
+        // Fetch true time from the OS only once per frame
         if (_lastSystemTimeFrame != currentFrame)
         {
             _lastSystemTimeFrame = currentFrame;
@@ -331,7 +331,7 @@ private static DateTime GetCurrentSystemTime()
         
         return _cachedSystemTime;
     }
-    return DateTime.Now; // Chế độ Editor
+    return DateTime.Now; // Editor mode
 }
 ```
 
